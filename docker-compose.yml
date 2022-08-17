@@ -2,15 +2,14 @@ version: '3'
 
 services:
   syncer:
+    init: true
     container_name: discord_bot
     hostname: discord_bot
     build: .
-    command: node dist/index.js
     environment:
-      - NODE_ENV=production
+      - DC_BOT_TOKEN=${DC_BOT_TOKEN}
       - CHANNEL_IDS=${CHANNEL_IDS}
       - GUILD_ID=${GUILD_ID}
-      - DC_BOT_TOKEN=${DC_BOT_TOKEN}
       - DC_EMBED_COLOR=${DC_EMBED_COLOR}
       - DC_ERROR_COLOR=${DC_ERROR_COLOR}
       - DC_SUCCESS_COLOR=${DC_SUCCESS_COLOR}
