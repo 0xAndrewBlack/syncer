@@ -1,22 +1,25 @@
 import { config } from '../../config.js';
 
-import { CommandInteraction, EmbedBuilder, ModalSubmitInteraction } from 'discord.js';
+import { CommandInteraction, EmbedBuilder, ModalSubmitInteraction, PermissionFlagsBits } from 'discord.js';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
-import { Discord, ModalComponent, Slash } from 'discordx';
+import { Discord, Guard, ModalComponent, Slash } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { ErrorHandler } from '../guards/ErrorGuard.js';
 
 @Discord()
 export class EditIssue {
-	@Slash('issue')
+	@Guard(ErrorHandler)
+	@Slash('issue', {
+		defaultPermission: false,
+		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
+	})
 	@Description('Edits issue title and body via a modal.')
 	async attachment(interaction: CommandInteraction): Promise<void> {
 		if (!interaction.channel?.isThread()) {
-			await interaction.reply('Channel is not thread channel.');
-
-			return;
+			throw new Error(`Channel is not a \`Thread\` channel.`);
 		}
 
 		// Create the modal
@@ -44,12 +47,11 @@ export class EditIssue {
 		interaction.showModal(modal);
 	}
 
+	@Guard(ErrorHandler)
 	@ModalComponent('Edit Issue')
 	async handle(interaction: ModalSubmitInteraction): Promise<void> {
 		if (!interaction.channel?.isThread()) {
-			await interaction.reply('Channel is not thread channel.');
-
-			return;
+			throw new Error(`Channel is not a \`Thread\` channel.`);
 		}
 
 		const [issueTitle, issueBody] = ['issueTitle', 'issueBody'].map((id) => interaction.fields.getTextInputValue(id));
