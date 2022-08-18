@@ -1,15 +1,20 @@
 import { config } from '../../config.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { ErrorHandler } from '../guards/ErrorGuard.js';
 
 @Discord()
 export class ChangePriority {
-	@Slash('priority')
+	@Guard(ErrorHandler)
+	@Slash('priority', {
+		defaultPermission: false,
+		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
+	})
 	@Description('Sets priority.')
 	async changePriority(
 		@SlashChoice(...Priorities)
@@ -18,8 +23,7 @@ export class ChangePriority {
 		interaction: CommandInteraction
 	): Promise<void> {
 		if (!interaction.channel?.isThread()) {
-			await interaction.reply('Channel is not thread channel.');
-			return;
+			throw new Error(`Channel is not a \`Thread\` channel.`);
 		}
 
 		try {
@@ -37,17 +41,7 @@ export class ChangePriority {
 				ephemeral: true,
 			});
 		} catch (error: unknown) {
-			const errorEmbed = new EmbedBuilder()
-				.setTitle('❌ An error occurred.')
-				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor(config.DC_COLORS.ERROR as any);
-
-			interaction.reply({
-				ephemeral: true,
-				embeds: [errorEmbed],
-			});
-
-			return;
+			throw error;
 		}
 	}
 }

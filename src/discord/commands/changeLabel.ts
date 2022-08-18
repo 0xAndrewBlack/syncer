@@ -1,21 +1,30 @@
 import { config } from '../../config.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Discord, Guard, Slash, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { ErrorHandler } from '../guards/ErrorGuard.js';
 
 @Discord()
 export class UpdateLabel {
-	@Slash('label')
+	@Guard(ErrorHandler)
+	@Slash('label', {
+		defaultPermission: false,
+		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
+	})
 	@Description('Sets label.')
 	async changePriority(
 		@SlashOption('label', { description: 'Issue label', required: true })
 		label: string,
 		interaction: CommandInteraction
 	): Promise<void> {
+		if (!interaction.channel?.isThread()) {
+			throw new Error(`Channel is not a \`Thread\` channel.`);
+		}
+
 		try {
 			const labelEmbed = new EmbedBuilder()
 				.setColor(config.DC_COLORS.SUCCESS as any)
@@ -31,19 +40,7 @@ export class UpdateLabel {
 				embeds: [labelEmbed],
 			});
 		} catch (error: unknown) {
-			const errorEmbed = new EmbedBuilder()
-				.setTitle('❌ An error occurred.')
-				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor(config.DC_COLORS.ERROR as any);
-
-			interaction.reply({
-				ephemeral: true,
-				embeds: [errorEmbed],
-			});
-
-			return;
+			throw error;
 		}
-
-		return;
 	}
 }

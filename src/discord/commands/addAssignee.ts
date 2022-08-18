@@ -1,15 +1,20 @@
 import { config } from '../../config.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Discord, Slash, SlashOption } from 'discordx';
+import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Discord, Guard, Slash, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { ErrorHandler } from '../guards/ErrorGuard.js';
 
 @Discord()
 export class AddAssignee {
-	@Slash('assign')
+	@Guard(ErrorHandler)
+	@Slash('assign', {
+		defaultPermission: false,
+		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
+	})
 	@Description('Adds user to the issue.')
 	async addAssignee(
 		@SlashOption('username', { description: 'GitHub username', required: true })
@@ -17,9 +22,7 @@ export class AddAssignee {
 		interaction: CommandInteraction
 	): Promise<void> {
 		if (!interaction.channel?.isThread()) {
-			await interaction.reply('Channel is not thread channel.');
-
-			return;
+			throw new Error(`Channel is not a \`Thread\` channel.`);
 		}
 
 		try {
@@ -41,17 +44,7 @@ export class AddAssignee {
 				ephemeral: true,
 			});
 		} catch (error: unknown) {
-			const errorEmbed = new EmbedBuilder()
-				.setTitle('❌ An error occurred.')
-				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor(config.DC_COLORS.ERROR as any);
-
-			interaction.reply({
-				ephemeral: true,
-				embeds: [errorEmbed],
-			});
-
-			return;
+			throw error;
 		}
 	}
 }

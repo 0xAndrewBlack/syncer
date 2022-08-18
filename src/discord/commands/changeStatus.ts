@@ -1,15 +1,20 @@
 import { config } from '../../config.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Discord, Slash, SlashChoice, SlashOption } from 'discordx';
+import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { Labels, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { ErrorHandler } from '../guards/ErrorGuard.js';
 
 @Discord()
 export class ChangeStatus {
-	@Slash('status')
+	@Guard(ErrorHandler)
+	@Slash('status', {
+		defaultPermission: false,
+		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
+	})
 	@Description('Sets status.')
 	async changePriority(
 		@SlashChoice(...Labels)
@@ -17,6 +22,10 @@ export class ChangeStatus {
 		status: string,
 		interaction: CommandInteraction
 	): Promise<void> {
+		if (!interaction.channel?.isThread()) {
+			throw new Error(`Channel is not a \`Thread\` channel.`);
+		}
+
 		const statusCleaned = status.replace('-', ' ');
 
 		const statusEmbed = new EmbedBuilder()
