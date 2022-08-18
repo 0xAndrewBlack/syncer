@@ -63,7 +63,7 @@ export class EditIssue {
 		await gh.editIssue(stripStatusFromThread(interaction.channel.name), issueTitle, issueBody);
 
 		const issueEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.SUCCESS as any)
+			.setColor('#3DE14E')
 			.setTitle(`✨ Issue \`${issueTitle}\` updated successfully.`);
 
 		await interaction.reply({

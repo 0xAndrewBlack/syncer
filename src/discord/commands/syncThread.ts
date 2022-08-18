@@ -45,7 +45,7 @@ export class SyncThread {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.EMBED as any)
+			.setColor('#6D0CE3')
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
@@ -67,9 +67,7 @@ export class SyncThread {
 				iconURL: interaction.channel.client.user?.displayAvatarURL(),
 			});
 
-		const syncEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.SUCCESS as any)
-			.setTitle(`🔃 Issue \`${name}\` synced successfully.`);
+		const syncEmbed = new EmbedBuilder().setColor('#3DE14E').setTitle(`🔃 Issue \`${name}\` synced successfully.`);
 
 		interaction.reply({
 			ephemeral: true,

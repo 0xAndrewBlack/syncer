@@ -33,7 +33,7 @@ export class ChangePriority {
 			gh.setPriority(stripStatusFromThread(interaction.channel.name), prio);
 
 			const priorityEmbed = new EmbedBuilder()
-				.setColor(config.DC_COLORS.SUCCESS as any)
+				.setColor('#3DE14E')
 				.setTitle(`💈 Priority updated to \`${prio}\` successfully.`);
 
 			await interaction.reply({

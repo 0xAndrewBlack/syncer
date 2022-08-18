@@ -11,7 +11,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (interactio
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('⛔ An error occurred.')
 				.setDescription(`${error.message}`)
-				.setColor(config.DC_COLORS.ERROR as any);
+				.setColor('#F03737');
 
 			interaction.reply({
 				ephemeral: true,
@@ -21,7 +21,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (interactio
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
 				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor(config.DC_COLORS.ERROR as any);
+				.setColor('#F03737');
 
 			interaction.reply({
 				ephemeral: true,

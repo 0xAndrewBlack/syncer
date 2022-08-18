@@ -36,7 +36,7 @@ export class AddAssignee {
 			await gh.addAssignee(channelName, assignee);
 
 			const assigneeEmbed = new EmbedBuilder()
-				.setColor(config.DC_COLORS.SUCCESS as any)
+				.setColor('#3DE14E')
 				.setTitle(`🧑 \`${assignee}\` assigned to \`${channelName}\` issue successfully.`);
 
 			await interaction.reply({

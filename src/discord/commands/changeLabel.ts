@@ -27,7 +27,7 @@ export class UpdateLabel {
 
 		try {
 			const labelEmbed = new EmbedBuilder()
-				.setColor(config.DC_COLORS.SUCCESS as any)
+				.setColor('#3DE14E')
 				.setTitle(`🏷️ Label(s) set to \`${label}\` successfully.`);
 
 			await gh.init();

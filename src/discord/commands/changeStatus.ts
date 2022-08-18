@@ -29,7 +29,7 @@ export class ChangeStatus {
 		const statusCleaned = status.replace('-', ' ');
 
 		const statusEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.SUCCESS as any)
+			.setColor('#3DE14E')
 			.setTitle(`🧪 Status updated to \`${statusCleaned}\` successfully.`);
 
 		await interaction.reply({

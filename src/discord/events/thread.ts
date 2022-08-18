@@ -21,7 +21,12 @@ export class ThreadHandler {
 
 		const validChannels = config.CHANNEL_IDS?.split(',');
 
-		if (!validChannels?.includes(String(thread.parentId))) return;
+		if (!validChannels?.includes(String(thread.parentId))) {
+			console.log('nem jó csatorna');
+			console.log(!validChannels?.includes(String(thread.parentId)));
+
+			return;
+		}
 
 		try {
 			gh.init();
@@ -38,7 +43,7 @@ export class ThreadHandler {
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
 				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor(config.DC_COLORS.ERROR as any);
+				.setColor('#F03737');
 
 			thread.send({
 				embeds: [errorEmbed],
@@ -48,7 +53,7 @@ export class ThreadHandler {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.EMBED as any)
+			.setColor('#6D0CE3')
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
