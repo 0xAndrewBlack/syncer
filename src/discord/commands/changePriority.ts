@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
@@ -6,26 +7,20 @@ import { Description } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { NotThread } from '../guards/NotThread.Guard.js';
 
 @Discord()
+@Guard(NotThread)
 export class ChangePriority {
-	@Guard(ErrorHandler)
-	@Slash('priority', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'priority', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Sets priority.')
 	async changePriority(
 		@SlashChoice(...Priorities)
-		@SlashOption('priority', { description: 'Issue priority', required: true })
+		@SlashOption({ name: 'priority', description: 'Issue priority', required: true })
 		prio: number,
 		interaction: CommandInteraction
 	): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		try {
 			gh.init();
 

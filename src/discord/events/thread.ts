@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
@@ -10,7 +11,7 @@ import { gh } from '../../services/githubService.js';
 
 @Discord()
 export class ThreadHandler {
-	@On('threadCreate')
+	@On({ event: 'threadCreate' })
 	async onThreadCreate([thread]: ArgsOf<'threadCreate'>, client: Client): Promise<void> {
 		const { name } = thread;
 
@@ -21,19 +22,19 @@ export class ThreadHandler {
 
 		const validChannels = config.CHANNEL_IDS?.split(',');
 		const isValidChannel = !validChannels?.includes(thread.parentId as any);
-		console.log(config.CHANNEL_IDS);
+		logger.verbose(config.CHANNEL_IDS);
 
 		if (isValidChannel) {
-			console.log(validChannels);
-			console.log('⛔ Nem jó csatorna');
-			console.log(`🧵 Channel ID: ${thread.parentId}`);
+			logger.verbose(validChannels);
+			logger.verbose('⛔ Nem jó csatorna');
+			logger.verbose(`🧵 Channel ID: ${thread.parentId}`);
 
 			return;
 		}
 
-		console.log(validChannels);
-		console.log(`🧵 Channel ID: ${thread.parentId}`);
-		console.log('✅ Jó csatorna');
+		logger.verbose(validChannels);
+		logger.verbose(`🧵 Channel ID: ${thread.parentId}`);
+		logger.verbose('✅ Jó csatorna');
 
 		try {
 			gh.init();
@@ -47,16 +48,7 @@ export class ThreadHandler {
 			issueObj.status = data.labels[0];
 			issueObj.issueLink = data.html_url;
 		} catch (error: unknown) {
-			const errorEmbed = new EmbedBuilder()
-				.setTitle('❌ An error occurred.')
-				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor('#F03737');
-
-			thread.send({
-				embeds: [errorEmbed],
-			});
-
-			return;
+			throw error;
 		}
 
 		issueEmbed = new EmbedBuilder()
@@ -84,7 +76,7 @@ export class ThreadHandler {
 
 		thread.send({ embeds: [issueEmbed] });
 	}
-	@On('threadUpdate')
+	@On({ event: 'threadUpdate' })
 	async onThreadUpdate([oldThread, newThread]: ArgsOf<'threadUpdate'>, client: Client): Promise<void> {
 		const oldName = stripStatusFromThread(oldThread.name);
 		const newName = stripStatusFromThread(newThread.name);
@@ -92,7 +84,7 @@ export class ThreadHandler {
 		gh.init();
 
 		if (newThread.archived) {
-			console.log('THREAD > Archived.');
+			logger.verbose('THREAD > Archived.');
 
 			gh.toggleIssue(oldName);
 			gh.toggleLockIssue(oldName);
@@ -101,7 +93,7 @@ export class ThreadHandler {
 		}
 
 		if (oldThread.archived && !newThread.archived) {
-			console.log('THREAD > Unarchived.');
+			logger.verbose('THREAD > Unarchived.');
 
 			gh.toggleIssue(newName);
 			gh.toggleLockIssue(newName);
@@ -111,19 +103,19 @@ export class ThreadHandler {
 
 		gh.editIssueWoBody(oldName, newName);
 	}
-	@On('threadDelete')
+	@On({ event: 'threadDelete' })
 	async onThreadDelete([thread]: ArgsOf<'threadDelete'>, client: Client): Promise<void> {
 		const { name } = thread;
 
-		console.log('Thread deleted', stripStatusFromThread(name));
+		logger.verbose('Thread deleted', stripStatusFromThread(name));
 
 		gh.init();
 
 		gh.toggleIssue(name);
 		gh.toggleLockIssue(name);
 	}
-	@On('threadListSync')
+	@On({ event: 'threadListSync' })
 	async onThreadSync([threads]: ArgsOf<'threadListSync'>, client: Client): Promise<void> {
-		console.log(`${threads.size} thread(s) were synced.`);
+		logger.verbose(`${threads.size} thread(s) were synced.`);
 	}
 }

@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Discord, Guard, Slash, SlashOption } from 'discordx';
@@ -6,25 +7,19 @@ import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { NotThread } from '../guards/NotThread.Guard.js';
 
 @Discord()
+@Guard(NotThread)
 export class UpdateLabel {
-	@Guard(ErrorHandler)
-	@Slash('label', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'label', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Sets label.')
 	async changePriority(
-		@SlashOption('label', { description: 'Issue label', required: true })
+		@SlashOption({ name: 'label', description: 'Issue label', required: true })
 		label: string,
 		interaction: CommandInteraction
 	): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		try {
 			const labelEmbed = new EmbedBuilder()
 				.setColor('#3DE14E')

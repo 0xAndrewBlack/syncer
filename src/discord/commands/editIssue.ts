@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder, ModalSubmitInteraction, PermissionFlagsBits } from 'discord.js';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
@@ -7,21 +8,15 @@ import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { NotThread } from '../guards/NotThread.Guard.js';
 
 @Discord()
+@Guard(NotThread)
 export class EditIssue {
-	@Guard(ErrorHandler)
-	@Slash('issue', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'issue', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Edits issue title and body via a modal.')
 	async attachment(interaction: CommandInteraction): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		// Create the modal
 		const modal = new ModalBuilder().setTitle('Edit Issue').setCustomId('Edit Issue');
 
@@ -47,19 +42,12 @@ export class EditIssue {
 		interaction.showModal(modal);
 	}
 
-	@Guard(ErrorHandler)
-	@ModalComponent('Edit Issue')
+	@ModalComponent({ id: 'Edit Issue' })
 	async handle(interaction: ModalSubmitInteraction): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		const [issueTitle, issueBody] = ['issueTitle', 'issueBody'].map((id) => interaction.fields.getTextInputValue(id));
+		// @ts-ignore
 		const status = interaction.channel.name.split(' ')[0];
-		// const guildId: any = interaction.guildId;
-		// const { repo_name, repo_owner, project_id } = await getGuildInfo(guildId);
-
-		// await gh.populate(guildId, repo_owner, repo_name, project_id);
+		// @ts-ignore
 		await gh.editIssue(stripStatusFromThread(interaction.channel.name), issueTitle, issueBody);
 
 		const issueEmbed = new EmbedBuilder()
@@ -71,6 +59,7 @@ export class EditIssue {
 			ephemeral: true,
 		});
 
+		// @ts-ignore
 		interaction.channel.setName(`${status} - ${issueTitle}`);
 
 		return;

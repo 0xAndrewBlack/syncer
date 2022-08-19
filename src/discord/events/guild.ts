@@ -1,12 +1,15 @@
+import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
+
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
 import { EmbedBuilder } from 'discord.js';
 
 @Discord()
 export class GuildHandler {
-	@On('guildCreate')
+	@On({ event: 'guildCreate' })
 	onGuildCreate([guild]: ArgsOf<'guildCreate'>, client: Client): void {
-		console.log(`Guild joined ${guild.name}`);
+		logger.verbose(`Guild joined ${guild.name}`);
 
 		const defaultChannel = guild.systemChannel;
 		const setUpEmbed = new EmbedBuilder()

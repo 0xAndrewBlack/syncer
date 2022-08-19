@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
@@ -6,26 +7,20 @@ import { Description } from '@discordx/utilities';
 
 import { Labels, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { NotThread } from '../guards/NotThread.Guard.js';
 
 @Discord()
+@Guard(NotThread)
 export class ChangeStatus {
-	@Guard(ErrorHandler)
-	@Slash('status', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'status', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Sets status.')
 	async changePriority(
 		@SlashChoice(...Labels)
-		@SlashOption('label', { description: 'Issue label', required: true })
+		@SlashOption({ name: 'label', description: 'Issue label', required: true })
 		status: string,
 		interaction: CommandInteraction
 	): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		const statusCleaned = status.replace('-', ' ');
 
 		const statusEmbed = new EmbedBuilder()
