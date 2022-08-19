@@ -1,4 +1,5 @@
 import { config } from './config.js';
+import logger from './utils/logger.js';
 
 import { Shard, ShardingManager } from 'discord.js';
 
@@ -11,7 +12,7 @@ export class ShardBot {
 		});
 
 		manager.on('shardCreate', (shard: Shard) => {
-			console.info(`Launched shard #${shard.id}`);
+			logger.info(`Launched shard #${shard.id}`);
 		});
 
 		manager.spawn({
