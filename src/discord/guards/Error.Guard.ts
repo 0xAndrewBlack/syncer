@@ -1,9 +1,13 @@
+import { config } from '../../config.js';
+
+import type { Client, GuardFunction, Next } from 'discordx';
 import { CommandInteraction, EmbedBuilder } from 'discord.js';
 
-import { config } from '../../config.js';
-import type { GuardFunction } from 'discordx';
-
-export const ErrorHandler: GuardFunction<CommandInteraction> = async (interaction, client, next) => {
+export const ErrorHandler: GuardFunction<CommandInteraction> = async (
+	interaction: CommandInteraction,
+	client: Client,
+	next: Next
+) => {
 	try {
 		await next();
 	} catch (error) {
