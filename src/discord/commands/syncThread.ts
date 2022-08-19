@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration } from 'discord.js';
 import { Description } from '@discordx/utilities';
@@ -6,23 +7,18 @@ import { Discord, Guard, Slash } from 'discordx';
 
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { NotThread } from '../guards/NotThread.Guard.js';
+import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 
 @Discord()
+@Guard(NotThread, IsIssueLinked)
 export class SyncThread {
-	@Guard(ErrorHandler)
-	@Slash('sync', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'sync', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Syncs thread to a new GitHub issue.')
 	async syncThread(interaction: CommandInteraction): Promise<void> {
 		// @ts-ignore
 		const { name } = interaction.channel;
-
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
 
 		let issueEmbed: any;
 		let issueObj: any = {};
@@ -64,6 +60,7 @@ export class SyncThread {
 			.setTimestamp()
 			.setFooter({
 				text: 'Synced by ZGEN.',
+				// @ts-ignore
 				iconURL: interaction.channel.client.user?.displayAvatarURL(),
 			});
 

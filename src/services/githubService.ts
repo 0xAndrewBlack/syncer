@@ -1,4 +1,5 @@
 import { config } from '../config.js';
+import logger from '../utils/logger.js';
 
 import { Octokit } from '@octokit/rest';
 import GitHubProject from 'github-project';
@@ -73,6 +74,29 @@ export class GitHubService {
 				name: label,
 			});
 		});
+	}
+
+	async isIssueExists(title: string): Promise<any> {
+		const { github, repo, owner } = this;
+
+		const state = github.search
+			.issuesAndPullRequests({
+				q: `type:issue ${title} repo:${owner}/${repo}`,
+				sort: 'created',
+			})
+			.then((query) => {
+				const issue = query.data.items[0];
+				const { number, labels, node_id, html_url } = issue;
+
+				if (html_url) {
+					return issue;
+				}
+			})
+			.catch((e: Error) => {
+				return false;
+			});
+
+		return state;
 	}
 
 	async createIssue(title: string, body: string, label: string | Array<string>) {
