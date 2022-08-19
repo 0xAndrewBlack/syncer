@@ -20,16 +20,19 @@ export class ThreadHandler {
 		let issueObj: any = {};
 
 		const validChannels = config.CHANNEL_IDS?.split(',');
-		const isValidChannel = !validChannels?.includes(String(thread.parentId));
+		const isValidChannel = !validChannels?.includes(thread.parentId as any);
 		console.log(config.CHANNEL_IDS);
 
 		if (isValidChannel) {
+			console.log(validChannels);
 			console.log('⛔ Nem jó csatorna');
 			console.log(`🧵 Channel ID: ${thread.parentId}`);
 
 			return;
 		}
 
+		console.log(validChannels);
+		console.log(`🧵 Channel ID: ${thread.parentId}`);
 		console.log('✅ Jó csatorna');
 
 		try {
