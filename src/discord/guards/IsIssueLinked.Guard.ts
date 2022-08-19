@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import type { Client, GuardFunction, Next } from 'discordx';
 import { CommandInteraction } from 'discord.js';

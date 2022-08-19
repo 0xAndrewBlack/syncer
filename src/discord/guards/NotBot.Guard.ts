@@ -1,3 +1,6 @@
+import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
+
 import type { ArgsOf, Client, GuardFunction, Next } from 'discordx';
 import { SimpleCommandMessage } from 'discordx';
 

@@ -1,4 +1,5 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
 import type { Client, GuardFunction, Next } from 'discordx';
 import { CommandInteraction, EmbedBuilder } from 'discord.js';
@@ -21,6 +22,8 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 				ephemeral: true,
 				embeds: [errorEmbed],
 			});
+
+			logger.warn(`${interaction.guild?.name} thrown ${error.name} error.`);
 		} else {
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
@@ -31,6 +34,8 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 				ephemeral: true,
 				embeds: [errorEmbed],
 			});
+
+			logger.error(`${interaction.guild?.name} thrown ${JSON.stringify(error)} error.`);
 		}
 	}
 };
