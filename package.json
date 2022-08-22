@@ -19,7 +19,7 @@
 		"@discordx/utilities": "^5.0.0",
 		"@octokit/auth-app": "^4.0.4",
 		"@octokit/rest": "^19.0.3",
-		"@octokit/webhooks": "^10.0.9",
+		"@octokit/webhooks": "^10.1.5",
 		"@prisma/client": "^4.1.0",
 		"discord-cross-ratelimit": "^0.0.7",
 		"discord-hybrid-sharding": "^1.7.1",
