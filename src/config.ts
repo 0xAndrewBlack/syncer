@@ -21,6 +21,8 @@ export const config = {
 		WARN: Colors.Gold,
 		ERROR: Colors.Red,
 	},
+	DB_ID: String(env.DB_ID),
+	DB_CHANNEL: String(env.DB_CHANNEL),
 	BUG_CHANNEL: String(env.BUG_CHANNEL),
 	IMP_CHANNEL: String(env.IMP_CHANNEL),
 	GUILD_ID: String(env.GUILD_ID),
