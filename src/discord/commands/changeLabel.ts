@@ -1,17 +1,17 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ColorResolvable, CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Discord, Guard, Slash, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
-import { NotThread } from '../guards/NotThread.Guard.js';
+import { IsThread } from '../guards/IsThread.Guard.js';
 
 @Discord()
-@Guard(NotThread)
+@Guard(IsThread)
 export class UpdateLabel {
 	@Slash({ name: 'label', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Sets label.')
@@ -22,7 +22,7 @@ export class UpdateLabel {
 	): Promise<void> {
 		try {
 			const labelEmbed = new EmbedBuilder()
-				.setColor('#3DE14E')
+				.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
 				.setTitle(`🏷️ Label(s) set to \`${label}\` successfully.`);
 
 			await gh.init();

@@ -1,22 +1,22 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ColorResolvable, CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
 import { Description } from '@discordx/utilities';
 
-import { Labels, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
+import { Status, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
-import { NotThread } from '../guards/NotThread.Guard.js';
+import { IsThread } from '../guards/IsThread.Guard.js';
 
 @Discord()
-@Guard(NotThread)
+@Guard(IsThread)
 export class ChangeStatus {
 	@Slash({ name: 'status', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Sets status.')
 	async changePriority(
-		@SlashChoice(...Labels)
+		@SlashChoice(...Status)
 		@SlashOption({ name: 'label', description: 'Issue label', required: true })
 		status: string,
 		interaction: CommandInteraction
@@ -24,7 +24,7 @@ export class ChangeStatus {
 		const statusCleaned = status.replace('-', ' ');
 
 		const statusEmbed = new EmbedBuilder()
-			.setColor('#3DE14E')
+			.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
 			.setTitle(`🧪 Status updated to \`${statusCleaned}\` successfully.`);
 
 		await interaction.reply({

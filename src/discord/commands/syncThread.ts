@@ -1,18 +1,24 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder, PermissionFlagsBits, ThreadAutoArchiveDuration } from 'discord.js';
+import {
+	ColorResolvable,
+	CommandInteraction,
+	EmbedBuilder,
+	PermissionFlagsBits,
+	ThreadAutoArchiveDuration,
+} from 'discord.js';
 import { Description } from '@discordx/utilities';
 import { Discord, Guard, Slash } from 'discordx';
 
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
-import { NotThread } from '../guards/NotThread.Guard.js';
+import { IsThread } from '../guards/IsThread.Guard.js';
 import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 
 @Discord()
-@Guard(NotThread, IsIssueLinked)
+@Guard(IsThread, IsIssueLinked)
 export class SyncThread {
 	@Slash({ name: 'sync', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
 	@Description('Syncs thread to a new GitHub issue.')
@@ -41,7 +47,7 @@ export class SyncThread {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor('#6D0CE3')
+			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
@@ -64,7 +70,11 @@ export class SyncThread {
 				iconURL: interaction.channel.client.user?.displayAvatarURL(),
 			});
 
-		const syncEmbed = new EmbedBuilder().setColor('#3DE14E').setTitle(`🔃 Issue \`${name}\` synced successfully.`);
+		logger.verbose('🧵 Thread synced.');
+
+		const syncEmbed = new EmbedBuilder()
+			.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
+			.setTitle(`🔃 Issue \`${name}\` synced successfully.`);
 
 		interaction.reply({
 			ephemeral: true,

@@ -1,7 +1,8 @@
-import { ArgsOf, Discord, On, RestArgsOf } from 'discordx';
-
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
+
+import type { ArgsOf, RestArgsOf } from 'discordx';
+import { Discord, On } from 'discordx';
 
 @Discord()
 export class DiscordEventHandler {

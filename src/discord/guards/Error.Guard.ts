@@ -2,7 +2,7 @@ import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
 import type { Client, GuardFunction, Next } from 'discordx';
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { ColorResolvable, CommandInteraction, EmbedBuilder } from 'discord.js';
 
 export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 	interaction: CommandInteraction,
@@ -14,9 +14,9 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 	} catch (error) {
 		if (error instanceof Error) {
 			const errorEmbed = new EmbedBuilder()
-				.setTitle('⛔ An error occurred.')
+				.setTitle('⚠️ An error occurred.')
 				.setDescription(`${error.message}`)
-				.setColor('#F03737');
+				.setColor(config.DC_COLORS.WARN as ColorResolvable);
 
 			interaction.reply({
 				ephemeral: true,
@@ -28,7 +28,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
 				.setDescription(`\`${JSON.stringify(error)}\``)
-				.setColor('#F03737');
+				.setColor(config.DC_COLORS.ERROR as ColorResolvable);
 
 			interaction.reply({
 				ephemeral: true,

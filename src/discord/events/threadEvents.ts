@@ -3,7 +3,7 @@ import logger from '../../utils/logger.js';
 
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
-import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
+import { ColorResolvable, EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
@@ -21,20 +21,15 @@ export class ThreadHandler {
 		let issueObj: any = {};
 
 		const validChannels = config.CHANNEL_IDS?.split(',');
-		const isValidChannel = !validChannels?.includes(thread.parentId as any);
-		logger.verbose(config.CHANNEL_IDS);
+		const isValidChannel = validChannels?.includes(thread.parentId as any);
 
-		if (isValidChannel) {
-			logger.verbose(validChannels);
-			logger.verbose('⛔ Nem jó csatorna');
-			logger.verbose(`🧵 Channel ID: ${thread.parentId}`);
+		if (!isValidChannel) {
+			logger.warn('⚠️ Thread was created in an other channel.');
 
 			return;
 		}
 
-		logger.verbose(validChannels);
-		logger.verbose(`🧵 Channel ID: ${thread.parentId}`);
-		logger.verbose('✅ Jó csatorna');
+		logger.verbose('✅ Thread created successfully.');
 
 		try {
 			gh.init();
@@ -52,7 +47,7 @@ export class ThreadHandler {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor('#6D0CE3')
+			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')

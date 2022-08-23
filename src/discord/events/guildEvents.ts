@@ -3,7 +3,7 @@ import logger from '../../utils/logger.js';
 
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
-import { EmbedBuilder } from 'discord.js';
+import { ColorResolvable, EmbedBuilder } from 'discord.js';
 
 @Discord()
 export class GuildHandler {
@@ -15,7 +15,7 @@ export class GuildHandler {
 		const setUpEmbed = new EmbedBuilder()
 			.setTitle('Yo!')
 			.setURL('https://github.com/0xAndrewBlack/github-discord-sync')
-			.setColor('#6D0CE3')
+			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
 			.setDescription(
 				"Yo, it's Sync!\n\nRead the following embed to learn how to sync your issues.\nFor more documentation visit the GitHub repo or the GitHub Wiki (the link is in the embed title).\n\n"
 			)

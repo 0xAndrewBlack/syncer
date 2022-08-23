@@ -3,8 +3,9 @@ import logger from '../../utils/logger.js';
 
 import type { Client, GuardFunction, Next } from 'discordx';
 import { CommandInteraction } from 'discord.js';
+import { UserError } from '../../interfaces/errorFactory.js';
 
-export const NotThread: GuardFunction<CommandInteraction> = async (
+export const IsThread: GuardFunction<CommandInteraction> = async (
 	interaction: CommandInteraction,
 	client: Client,
 	next: Next
@@ -12,7 +13,7 @@ export const NotThread: GuardFunction<CommandInteraction> = async (
 	const isThread = interaction.channel?.isThread();
 
 	if (!isThread) {
-		throw new Error(`Channel is not a \`Thread\` channel.`);
+		throw new UserError(`Channel is not a \`Thread\` channel.`);
 	}
 
 	await next();
