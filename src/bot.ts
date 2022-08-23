@@ -9,17 +9,16 @@ import { IntentsBitField } from 'discord.js';
 import { ActivityType } from 'discord.js';
 import { Client } from 'discordx';
 
-import { NotBot } from './discord/guards/NotBot.Guard.js';
 import { ErrorHandler } from './discord/guards/Error.Guard.js';
-import { djxLogger } from './interfaces/logger.js';
+import { botLogger } from './interfaces/loggerFactory.js';
 
-export class Main {
+export class DiscordBot {
 	public static bot: Client;
 
 	public static async start(): Promise<void> {
 		this.bot = new Client({
 			shards: 'auto',
-			logger: new djxLogger(),
+			logger: new botLogger(),
 			silent: String(config.NODE_ENV) !== 'development' ? true : false,
 			botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
 			intents: [
@@ -34,7 +33,7 @@ export class Main {
 				prefix: '!',
 			},
 			partials: [Partials.Channel, Partials.Message, Partials.Reaction],
-			guards: [NotBot, ErrorHandler],
+			guards: [ErrorHandler],
 		});
 
 		this.bot.once('ready', async () => {
@@ -42,7 +41,7 @@ export class Main {
 			await this.bot.initApplicationCommands();
 			await this.bot.initGlobalApplicationCommands();
 
-			logger.info(`${this.bot.user?.username} is up.`);
+			logger.info(`${this.bot.user?.username} logged in.`);
 		});
 
 		this.bot.on('ready', async () => {
@@ -66,9 +65,9 @@ export class Main {
 	}
 }
 
-// Weird BigInt error fix from DJX devs LUL.
+// Polyfill for BigInt serialization
 (BigInt.prototype as any).toJSON = function (): string {
 	return this.toString();
 };
 
-Main.start();
+DiscordBot.start();

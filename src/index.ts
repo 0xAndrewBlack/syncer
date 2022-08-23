@@ -12,7 +12,7 @@ export class ShardBot {
 		});
 
 		manager.on('shardCreate', (shard: Shard) => {
-			logger.info(`Launched shard #${shard.id}`);
+			logger.info(`Shard #${shard.id} launched.`);
 		});
 
 		manager.spawn({

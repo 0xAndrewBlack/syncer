@@ -1,9 +1,9 @@
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format, level, transports } from 'winston';
 
 const { printf, combine, colorize, timestamp, errors } = format;
 
 const devLogFormat = printf((log) => {
-	let msg = `${log.timestamp} ${log.level}: ${log.message}`;
+	let msg = `${log.timestamp} ${log.level} ${log.message}`;
 	if (log.meta) {
 		const metaToLog = { ...log.meta };
 		Object.keys(metaToLog).forEach((k) => {
@@ -21,7 +21,7 @@ const devLogFormat = printf((log) => {
 
 const logger = createLogger({
 	level: 'debug',
-	format: combine(colorize(), timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), errors({ stack: true }), devLogFormat),
+	format: combine(colorize(), timestamp({ format: 'DD-MM-YYYY hh:mm:ss A' }), errors({ stack: true }), devLogFormat),
 	transports: [new transports.Console()],
 });
 

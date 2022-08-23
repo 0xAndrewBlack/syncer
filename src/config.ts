@@ -2,15 +2,23 @@ import { env } from 'process';
 
 import dotenv from 'dotenv';
 
+import { colors } from './utils/discord.js';
+import { EnvironmentError } from './interfaces/errorFactory.js';
+
 dotenv.config();
+
+if (!env.DC_BOT_TOKEN) {
+	throw new EnvironmentError('Invalid or unavailable the DC_BOT_TOKEN in your environment');
+}
 
 export const config = {
 	NODE_ENV: String(env.NODE_ENV),
 	DC_BOT_TOKEN: String(env.DC_BOT_TOKEN),
 	DC_COLORS: {
-		ERROR: String(env.DC_ERROR_COLOR),
-		EMBED: String(env.DC_EMBED_COLOR),
-		SUCCESS: String(env.DC_SUCCESS_COLOR),
+		EMBED: String(colors.DC_EMBED_COLOR),
+		SUCCESS: String(colors.DC_SUCCESS_COLOR),
+		WARN: String(colors.DC_WARN_COLOR),
+		ERROR: String(colors.DC_ERROR_COLOR),
 	},
 	CHANNEL_IDS: String(env.CHANNEL_IDS),
 	GUILD_ID: String(env.GUILD_ID),
