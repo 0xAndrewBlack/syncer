@@ -3,7 +3,7 @@ import logger from '../../utils/logger.js';
 
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
-import { ColorResolvable, EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
+import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
@@ -30,12 +30,12 @@ export class ThreadHandler {
 		logger.debug(thread.parentId);
 
 		if (!isValidChannel) {
-			logger.warn('Thread was created in an other channel.');
+			logger.warn('THREAD > Was created in an other channel.');
 
 			return;
 		}
 
-		logger.verbose('Thread created successfully.');
+		logger.verbose('THREAD > Created successfully.');
 
 		try {
 			gh.init();
@@ -48,7 +48,8 @@ export class ThreadHandler {
 				label = 'improvement';
 			}
 
-			const { data } = await gh.createIssue(name, name, [label]);
+			const msg: any = await thread.fetchStarterMessage();
+			const { data } = await gh.createIssue(name, msg.content, [label]);
 
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
@@ -62,7 +63,7 @@ export class ThreadHandler {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
+			.setColor(config.DC_COLORS.EMBED)
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
@@ -96,6 +97,15 @@ export class ThreadHandler {
 		if (newThread.archived) {
 			logger.verbose('THREAD > Archived.');
 
+			const { node_id } = await gh.isIssueExists(newThread.name);
+			const project = await gh.getProject(node_id);
+
+			// Persistent thread if not already Done
+			if (project.fields.status != 'Done') {
+				newThread.setArchived(false);
+				newThread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+			}
+
 			gh.toggleIssue(oldName);
 			gh.toggleLockIssue(oldName);
 
@@ -117,7 +127,7 @@ export class ThreadHandler {
 	async onThreadDelete([thread]: ArgsOf<'threadDelete'>, client: Client): Promise<void> {
 		const { name } = thread;
 
-		logger.verbose('Thread deleted', stripStatusFromThread(name));
+		logger.verbose(`THREAD > ${stripStatusFromThread(name)} deleted.`);
 
 		gh.init();
 
@@ -126,6 +136,6 @@ export class ThreadHandler {
 	}
 	@On({ event: 'threadListSync' })
 	async onThreadSync([threads]: ArgsOf<'threadListSync'>, client: Client): Promise<void> {
-		logger.verbose(`${threads.size} thread(s) were synced.`);
+		logger.verbose(`THREAD > ${threads.size} thread(s) were synced.`);
 	}
 }

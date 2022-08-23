@@ -3,19 +3,19 @@ import logger from '../../utils/logger.js';
 
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
-import { ColorResolvable, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 @Discord()
 export class GuildHandler {
 	@On({ event: 'guildCreate' })
 	async onGuildCreate([guild]: ArgsOf<'guildCreate'>, client: Client): Promise<void> {
-		logger.verbose(`Guild joined ${guild.name}`);
+		logger.verbose(`GUILD > ${guild.name} joined.`);
 
 		const defaultChannel = guild.systemChannel;
 		const setUpEmbed = new EmbedBuilder()
 			.setTitle('Yo!')
 			.setURL('https://github.com/0xAndrewBlack/github-discord-sync')
-			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
+			.setColor(config.DC_COLORS.EMBED)
 			.setDescription(
 				"Yo, it's Sync!\n\nRead the following embed to learn how to sync your issues.\nFor more documentation visit the GitHub repo or the GitHub Wiki (the link is in the embed title).\n\n"
 			)

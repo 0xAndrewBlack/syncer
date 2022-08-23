@@ -15,6 +15,6 @@ export class MessageHandler {
 	}
 	@On({ event: 'messageDelete' })
 	async onMessageDelete([message]: ArgsOf<'messageDelete'>, client: Client): Promise<void> {
-		logger.verbose('Message Deleted', client.user?.username, message.content);
+		logger.verbose(`MESSAGE > Deleted with content: ${message.content}`);
 	}
 }
