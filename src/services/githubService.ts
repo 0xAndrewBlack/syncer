@@ -111,7 +111,7 @@ export class GitHubService {
 		});
 
 		project.items.add(issue.data.node_id, {
-			status: String(label),
+			status: 'Backlog',
 		});
 
 		return issue;

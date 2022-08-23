@@ -26,6 +26,7 @@ export class SyncThread {
 		// @ts-ignore
 		const { name } = interaction.channel;
 
+		let label: string = 'backlog';
 		let issueEmbed: any;
 		let issueObj: any = {};
 
@@ -34,7 +35,18 @@ export class SyncThread {
 			interaction.channel?.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 
 			gh.init();
-			const { data } = await gh.createIssue(name, name, ['Backlog']);
+
+			if (interaction.channel?.isThread()) {
+				if (interaction.channel.parentId == config.BUG_CHANNEL) {
+					label = 'bug';
+				}
+
+				if (interaction.channel.parentId == config.IMP_CHANNEL) {
+					label = 'improvement';
+				}
+			}
+
+			const { data } = await gh.createIssue(name, name, [label]);
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 			// @ts-ignore
 			interaction.channel.setName(`${status} - ${name}`);

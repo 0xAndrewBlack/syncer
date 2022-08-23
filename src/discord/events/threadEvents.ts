@@ -8,6 +8,7 @@ import { ColorResolvable, EmbedBuilder, ThreadAutoArchiveDuration } from 'discor
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { capitalize } from '../../utils/helpers.js';
 
 @Discord()
 export class ThreadHandler {
@@ -17,24 +18,38 @@ export class ThreadHandler {
 
 		thread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 
+		let label: string = 'backlog';
 		let issueEmbed: any;
 		let issueObj: any = {};
 
-		const validChannels = config.CHANNEL_IDS?.split(',');
+		const validChannels = [config.BUG_CHANNEL, config.IMP_CHANNEL];
 		const isValidChannel = validChannels?.includes(thread.parentId as any);
 
+		logger.debug(isValidChannel);
+		logger.debug(validChannels);
+		logger.debug(thread.parentId);
+
 		if (!isValidChannel) {
-			logger.warn('⚠️ Thread was created in an other channel.');
+			logger.warn('Thread was created in an other channel.');
 
 			return;
 		}
 
-		logger.verbose('✅ Thread created successfully.');
+		logger.verbose('Thread created successfully.');
 
 		try {
 			gh.init();
 
-			const { data } = await gh.createIssue(name, name, ['Backlog']);
+			if (thread.parentId == config.BUG_CHANNEL) {
+				label = 'bug';
+			}
+
+			if (thread.parentId == config.IMP_CHANNEL) {
+				label = 'improvement';
+			}
+
+			const { data } = await gh.createIssue(name, name, [label]);
+
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
 			thread.setName(`${status} - ${name}`);
