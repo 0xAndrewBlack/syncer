@@ -12,30 +12,32 @@ import { IsThread } from '../guards/IsThread.Guard.js';
 
 @Discord()
 @Guard(IsThread)
-export class UpdateLabel {
-	@Slash({ name: 'label' })
+export class DeleteSync {
+	@Slash({ name: 'purge' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sets label.')
-	async changePriority(
-		@SlashOption({ name: 'label', description: 'Issue label', required: true })
-		label: string,
-		interaction: CommandInteraction
-	): Promise<void> {
+	@Description('Deletes sync, issue and thread too.')
+	async deleteSync(interaction: CommandInteraction): Promise<void> {
 		try {
 			const labelEmbed = new EmbedBuilder()
 				.setColor(config.DC_COLORS.SUCCESS)
-				.setTitle(`🏷️ Label(s) set to \`${label}\` successfully.`);
+				// @ts-ignore
+				.setTitle(`🚮 Sync \`${stripStatusFromThread(interaction.channel.name)}\` deleted successfully.`);
 
 			await gh.init();
 
 			// @ts-ignore
-			await gh.editIssueLabel(stripStatusFromThread(interaction.channel.name), [...label.split(',')], true);
+			// await gh.deleteIssue(interaction.channel.name);
 			// @ts-ignore
-			logger.verbose(`SYNCER > Label ${label}, appended to ${interaction.channel.name} issue.`);
+			logger.verbose(`SYNCER > Sync ${stripStatusFromThread(interaction.channel.name)} deleted thread/issue.`);
+			// @ts-ignore
+			await interaction.channel.setName(`🚮 - ${stripStatusFromThread(interaction.channel.name)}`);
 			await interaction.reply({
 				ephemeral: true,
 				embeds: [labelEmbed],
 			});
+			// .then((data) => {
+			// 	data.interaction.channel?.delete();
+			// });
 		} catch (error: unknown) {
 			throw error;
 		}

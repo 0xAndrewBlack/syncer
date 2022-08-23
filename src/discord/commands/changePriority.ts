@@ -1,31 +1,27 @@
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description } from '@discordx/utilities';
+import { Description, PermissionGuard } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { ErrorHandler } from '../guards/ErrorGuard.js';
+
+import { IsThread } from '../guards/IsThread.Guard.js';
 
 @Discord()
+@Guard(IsThread)
 export class ChangePriority {
-	@Guard(ErrorHandler)
-	@Slash('priority', {
-		defaultPermission: false,
-		defaultMemberPermissions: PermissionFlagsBits.SendMessages,
-	})
+	@Slash({ name: 'priority' })
+	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Sets priority.')
 	async changePriority(
 		@SlashChoice(...Priorities)
-		@SlashOption('priority', { description: 'Issue priority', required: true })
+		@SlashOption({ name: 'priority', description: 'Issue priority', required: true })
 		prio: number,
 		interaction: CommandInteraction
 	): Promise<void> {
-		if (!interaction.channel?.isThread()) {
-			throw new Error(`Channel is not a \`Thread\` channel.`);
-		}
-
 		try {
 			gh.init();
 
@@ -33,9 +29,10 @@ export class ChangePriority {
 			gh.setPriority(stripStatusFromThread(interaction.channel.name), prio);
 
 			const priorityEmbed = new EmbedBuilder()
-				.setColor('#3DE14E')
+				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`💈 Priority updated to \`${prio}\` successfully.`);
-
+			// @ts-ignore
+			logger.verbose(`SYNCER > Priority ${prio}, changed on ${interaction.channel.name} issue.`);
 			await interaction.reply({
 				embeds: [priorityEmbed],
 				ephemeral: true,

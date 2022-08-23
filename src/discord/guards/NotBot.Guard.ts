@@ -1,3 +1,9 @@
+import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
+
+import type { ArgsOf, Client, GuardFunction, Next } from 'discordx';
+import { SimpleCommandMessage } from 'discordx';
+
 import {
 	ButtonInteraction,
 	CommandInteraction,
@@ -8,12 +14,6 @@ import {
 	VoiceState,
 } from 'discord.js';
 
-import type { ArgsOf, GuardFunction } from 'discordx';
-import { SimpleCommandMessage } from 'discordx';
-
-// Example by @AndyClausen
-// Modified by @oceanroleplay
-
 export const NotBot: GuardFunction<
 	| ArgsOf<'messageCreate' | 'messageReactionAdd' | 'voiceStateUpdate'>
 	| CommandInteraction
@@ -21,7 +21,7 @@ export const NotBot: GuardFunction<
 	| SelectMenuInteraction
 	| ButtonInteraction
 	| SimpleCommandMessage
-> = async (arg, client, next, guardData) => {
+> = async (arg: object, client: Client, next: Next, guardData: any) => {
 	const argObj = arg instanceof Array ? arg[0] : arg;
 	const user =
 		argObj instanceof CommandInteraction

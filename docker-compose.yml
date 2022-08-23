@@ -8,15 +8,12 @@ services:
     build: .
     environment:
       - DC_BOT_TOKEN=${DC_BOT_TOKEN}
-      - CHANNEL_IDS=${CHANNEL_IDS}
       - GUILD_ID=${GUILD_ID}
-      - DC_EMBED_COLOR=${DC_EMBED_COLOR}
-      - DC_ERROR_COLOR=${DC_ERROR_COLOR}
-      - DC_SUCCESS_COLOR=${DC_SUCCESS_COLOR}
+      - CHANNEL_IDS=${CHANNEL_IDS}
+      - GH_TOKEN=${GH_TOKEN}
       - GH_ORG=${GH_ORG}
       - GH_REPO=${GH_REPO}
       - GH_PROJECT_NUMBER=${GH_PROJECT_NUMBER}
-      - GH_TOKEN=${GH_TOKEN}
     restart: on-failure
     networks:
       botnet:

@@ -47,5 +47,5 @@ RUN deluser --remove-home node \
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-# Start bot
+# Start the bot
 CMD [ "node", "dist/index.js"]

@@ -1,4 +1,5 @@
 import { config } from '../config.js';
+import logger from '../utils/logger.js';
 
 import { Octokit } from '@octokit/rest';
 import GitHubProject from 'github-project';
@@ -75,6 +76,35 @@ export class GitHubService {
 		});
 	}
 
+	async isIssueExists(title: string): Promise<any> {
+		const { github, repo, owner } = this;
+
+		const state = github.search
+			.issuesAndPullRequests({
+				q: `type:issue ${title} repo:${owner}/${repo}`,
+				sort: 'created',
+			})
+			.then((query) => {
+				const issue = query.data.items[0];
+				const { number, labels, node_id, html_url } = issue;
+
+				if (html_url) {
+					return issue;
+				}
+			})
+			.catch((e: Error) => {
+				return false;
+			});
+
+		return state;
+	}
+
+	async getProject(nodeId: string): Promise<any> {
+		const { project } = this;
+
+		return project.items.getByContentId(nodeId);
+	}
+
 	async createIssue(title: string, body: string, label: string | Array<string>) {
 		const { github, project, repo, owner } = this;
 
@@ -87,7 +117,7 @@ export class GitHubService {
 		});
 
 		project.items.add(issue.data.node_id, {
-			status: String(label),
+			status: 'Backlog',
 		});
 
 		return issue;
@@ -164,14 +194,14 @@ export class GitHubService {
 				q: `type:issue ${title} repo:${owner}/${repo}`,
 			})
 			.then((query) => {
-				const { number, node_id } = query.data.items[0];
+				const { number, node_id, labels } = query.data.items[0];
 
 				if (updateIssue) {
 					github.issues.update({
 						issue_number: Number(number),
 						owner: owner,
 						repo: repo,
-						labels: [...label],
+						labels: [...labels, ...label],
 					});
 
 					return;
@@ -221,7 +251,7 @@ export class GitHubService {
 	}
 
 	async toggleIssue(title: string) {
-		const { github, repo, owner } = this;
+		const { github, project, repo, owner } = this;
 
 		github.search
 			.issuesAndPullRequests({
@@ -229,7 +259,15 @@ export class GitHubService {
 				sort: 'created',
 			})
 			.then((query) => {
-				const { state, number, labels } = query.data.items[0];
+				const { state, number, labels, node_id } = query.data.items[0];
+
+				project.items.getByContentId(node_id).then((issue) => {
+					if (issue?.fields.status === 'Done') {
+						project.items.updateByContentId(node_id, {
+							status: 'Backlog',
+						});
+					}
+				});
 
 				github.issues.update({
 					issue_number: Number(number),

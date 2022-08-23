@@ -9,7 +9,7 @@
 			"request": "launch",
 			"name": "Debug bot",
 			"protocol": "inspector",
-			"args": ["${workspaceRoot}/src/main.ts"],
+			"args": ["${workspaceRoot}/src/index.ts"],
 			"cwd": "${workspaceRoot}",
 			"runtimeArgs": ["-r", "ts-node/register"],
 			"internalConsoleOptions": "neverOpen"
