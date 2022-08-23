@@ -1,9 +1,9 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { ColorResolvable, CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description } from '@discordx/utilities';
+import { Description, PermissionGuard } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -13,7 +13,8 @@ import { IsThread } from '../guards/IsThread.Guard.js';
 @Discord()
 @Guard(IsThread)
 export class ChangePriority {
-	@Slash({ name: 'priority', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
+	@Slash({ name: 'priority' })
+	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Sets priority.')
 	async changePriority(
 		@SlashChoice(...Priorities)
@@ -28,9 +29,10 @@ export class ChangePriority {
 			gh.setPriority(stripStatusFromThread(interaction.channel.name), prio);
 
 			const priorityEmbed = new EmbedBuilder()
-				.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
+				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`💈 Priority updated to \`${prio}\` successfully.`);
-
+			// @ts-ignore
+			logger.verbose(`SYNCER > Priority ${prio}, changed on ${interaction.channel.name} issue.`);
 			await interaction.reply({
 				embeds: [priorityEmbed],
 				ephemeral: true,

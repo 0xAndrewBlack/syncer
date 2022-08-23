@@ -1,17 +1,11 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import {
-	ColorResolvable,
-	CommandInteraction,
-	EmbedBuilder,
-	PermissionFlagsBits,
-	ThreadAutoArchiveDuration,
-} from 'discord.js';
-import { Description } from '@discordx/utilities';
+import { CommandInteraction, EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
+import { Description, PermissionGuard } from '@discordx/utilities';
 import { Discord, Guard, Slash } from 'discordx';
 
-import { labelsWithEmojis } from '../../utils/discord.js';
+import { labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
@@ -20,7 +14,8 @@ import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 @Discord()
 @Guard(IsThread, IsIssueLinked)
 export class SyncThread {
-	@Slash({ name: 'sync', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
+	@Slash({ name: 'sync' })
+	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Syncs thread to a new GitHub issue.')
 	async syncThread(interaction: CommandInteraction): Promise<void> {
 		// @ts-ignore
@@ -29,6 +24,7 @@ export class SyncThread {
 		let label: string = 'backlog';
 		let issueEmbed: any;
 		let issueObj: any = {};
+		let isUrgent = String(name).startsWith('🚩');
 
 		try {
 			// @ts-ignore
@@ -46,10 +42,19 @@ export class SyncThread {
 				}
 			}
 
-			const { data } = await gh.createIssue(name, name, [label]);
-			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
+			let status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
+			if (isUrgent) {
+				status = '🚩';
+				label = 'urgent';
+			}
+			const { data } = await gh.createIssue(
+				isUrgent ? stripStatusFromThread(name) : name,
+				isUrgent ? stripStatusFromThread(name) : name,
+				[label]
+			);
+
 			// @ts-ignore
-			interaction.channel.setName(`${status} - ${name}`);
+			interaction.channel.setName(`${status} - ${isUrgent ? stripStatusFromThread(name) : name}`);
 
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
@@ -59,8 +64,8 @@ export class SyncThread {
 		}
 
 		issueEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.EMBED as ColorResolvable)
-			.setTitle(name)
+			.setColor(config.DC_COLORS.EMBED)
+			.setTitle(isUrgent ? stripStatusFromThread(name) : name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
 			.addFields(
@@ -82,11 +87,12 @@ export class SyncThread {
 				iconURL: interaction.channel.client.user?.displayAvatarURL(),
 			});
 
-		logger.verbose('🧵 Thread synced.');
+		// @ts-ignore
+		logger.verbose(`SYNCER > Thread ${interaction.channel.name} synced.`);
 
 		const syncEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
-			.setTitle(`🔃 Issue \`${name}\` synced successfully.`);
+			.setColor(config.DC_COLORS.SUCCESS)
+			.setTitle(`🔃 Issue \`${isUrgent ? stripStatusFromThread(name) : name}\` synced successfully.`);
 
 		interaction.reply({
 			ephemeral: true,

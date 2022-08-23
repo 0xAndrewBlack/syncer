@@ -1,9 +1,9 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { ColorResolvable, CommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description } from '@discordx/utilities';
+import { Description, PermissionGuard } from '@discordx/utilities';
 
 import { Status, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -13,18 +13,19 @@ import { IsThread } from '../guards/IsThread.Guard.js';
 @Discord()
 @Guard(IsThread)
 export class ChangeStatus {
-	@Slash({ name: 'status', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
+	@Slash({ name: 'status' })
+	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Sets status.')
 	async changePriority(
 		@SlashChoice(...Status)
-		@SlashOption({ name: 'label', description: 'Issue label', required: true })
+		@SlashOption({ name: 'status', description: 'Issue status', required: true })
 		status: string,
 		interaction: CommandInteraction
 	): Promise<void> {
 		const statusCleaned = status.replace('-', ' ');
 
 		const statusEmbed = new EmbedBuilder()
-			.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
+			.setColor(config.DC_COLORS.SUCCESS)
 			.setTitle(`🧪 Status updated to \`${statusCleaned}\` successfully.`);
 
 		await interaction.reply({
@@ -38,9 +39,15 @@ export class ChangeStatus {
 		await gh.editIssueLabel(stripStatusFromThread(interaction.channel.name), [statusCleaned], false);
 
 		const statusEmoji = labelsWithEmojis.find((labels) => labels.label === statusCleaned)?.emoji;
-
 		// @ts-ignore
-		await interaction.channel.setName(`${statusEmoji} - ${stripStatusFromThread(interaction.channel.name)}`);
+		const issueName = stripStatusFromThread(interaction.channel.name);
+		// @ts-ignore
+		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
+
+		if (interaction.channel?.isThread()) {
+			interaction.channel.setArchived(true);
+		}
 
 		return;
 	}

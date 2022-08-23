@@ -1,16 +1,9 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import {
-	ApplicationCommandOptionType,
-	ColorResolvable,
-	CommandInteraction,
-	EmbedBuilder,
-	GuildMember,
-	PermissionFlagsBits,
-} from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, GuildMember } from 'discord.js';
 import { Discord, Guard, Slash, SlashOption } from 'discordx';
-import { Description } from '@discordx/utilities';
+import { Description, PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -21,7 +14,8 @@ import { users } from '../../utils/users.js';
 @Discord()
 @Guard(IsThread)
 export class AddAssignee {
-	@Slash({ name: 'assign', defaultMemberPermissions: PermissionFlagsBits.SendMessages })
+	@Slash({ name: 'assign' })
+	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Adds user to the issue.')
 	async addAssignee(
 		@SlashOption({
@@ -45,11 +39,13 @@ export class AddAssignee {
 			await gh.addAssignee(channelName, assignee);
 
 			const assigneeEmbed = new EmbedBuilder()
-				.setColor(config.DC_COLORS.SUCCESS as ColorResolvable)
+				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`🧑 \`${assignee}\` assigned to \`${channelName}\` issue successfully.`);
 
 			// WIP
 			// interaction.channel?.send(`<@${mentionedAssignee.id}>`);
+
+			logger.verbose(`SYNCER > Asignee ${assignee}, assigned to ${channelName} issue.`);
 
 			await interaction.reply({
 				embeds: [assigneeEmbed],
