@@ -188,14 +188,14 @@ export class GitHubService {
 				q: `type:issue ${title} repo:${owner}/${repo}`,
 			})
 			.then((query) => {
-				const { number, node_id } = query.data.items[0];
+				const { number, node_id, labels } = query.data.items[0];
 
 				if (updateIssue) {
 					github.issues.update({
 						issue_number: Number(number),
 						owner: owner,
 						repo: repo,
-						labels: [...label],
+						labels: [...labels, ...label],
 					});
 
 					return;
@@ -245,7 +245,7 @@ export class GitHubService {
 	}
 
 	async toggleIssue(title: string) {
-		const { github, repo, owner } = this;
+		const { github, project, repo, owner } = this;
 
 		github.search
 			.issuesAndPullRequests({
@@ -253,7 +253,15 @@ export class GitHubService {
 				sort: 'created',
 			})
 			.then((query) => {
-				const { state, number, labels } = query.data.items[0];
+				const { state, number, labels, node_id } = query.data.items[0];
+
+				project.items.getByContentId(node_id).then((issue) => {
+					if (issue?.fields.status === 'Done') {
+						project.items.updateByContentId(node_id, {
+							status: 'Backlog',
+						});
+					}
+				});
 
 				github.issues.update({
 					issue_number: Number(number),
