@@ -99,6 +99,12 @@ export class GitHubService {
 		return state;
 	}
 
+	async getProject(nodeId: string): Promise<any> {
+		const { project } = this;
+
+		return project.items.getByContentId(nodeId);
+	}
+
 	async createIssue(title: string, body: string, label: string | Array<string>) {
 		const { github, project, repo, owner } = this;
 
