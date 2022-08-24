@@ -10,6 +10,7 @@ import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
+import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread, IsIssueLinked)
@@ -59,8 +60,8 @@ export class SyncThread {
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
 			issueObj.issueLink = data.html_url;
-		} catch (error: unknown) {
-			throw error;
+		} catch (error: Error | any) {
+			throw new APIError(error.message);
 		}
 
 		issueEmbed = new EmbedBuilder()

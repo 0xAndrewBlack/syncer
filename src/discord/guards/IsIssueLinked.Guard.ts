@@ -6,6 +6,7 @@ import { CommandInteraction } from 'discord.js';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { UserError } from '../../interfaces/errorFactory.js';
 
 export const IsIssueLinked: GuardFunction<CommandInteraction> = async (
 	interaction: CommandInteraction,
@@ -19,7 +20,7 @@ export const IsIssueLinked: GuardFunction<CommandInteraction> = async (
 	const issue = await gh.isIssueExists(channelName);
 
 	if (issue) {
-		throw new Error(`Issue is already linked to \`#${issue?.number}\` issue.`);
+		throw new UserError(`Issue is already linked to \`#${issue?.number}\` issue.`);
 	}
 
 	await next();
