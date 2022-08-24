@@ -20,7 +20,7 @@ export class IssueStatus {
 		await gh.init();
 
 		const { number, html_url, body, labels, assignee } = guardData.issue;
-		const { status } = guardData.project.fields;
+		const { status, priority } = guardData.project.fields;
 
 		const statusEmbed = new EmbedBuilder()
 			.setTitle('Issue Status')
@@ -35,7 +35,7 @@ export class IssueStatus {
 				},
 				{
 					name: 'Priority',
-					value: `\`${status}\``,
+					value: `\`${priority ? priority : 'None'}\``,
 					inline: true,
 				},
 				{

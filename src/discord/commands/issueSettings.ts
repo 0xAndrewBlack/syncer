@@ -31,7 +31,7 @@ export class IssueSettings {
 		status: string,
 		@SlashChoice(...Priorities)
 		@SlashOption({ name: 'priority', description: 'Issue priority', required: false })
-		prio: number,
+		prio: string,
 		@SlashOption({ name: 'label', description: 'Issue label', required: false }) label: string,
 		interaction: CommandInteraction
 	): Promise<void> {

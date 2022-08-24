@@ -20,7 +20,7 @@ export class ChangePriority {
 	async changePriority(
 		@SlashChoice(...Priorities)
 		@SlashOption({ name: 'priority', description: 'Issue priority', required: true })
-		prio: number,
+		prio: string,
 		interaction: CommandInteraction
 	): Promise<void> {
 		try {
@@ -32,8 +32,18 @@ export class ChangePriority {
 			const priorityEmbed = new EmbedBuilder()
 				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`💈 Priority updated to \`${prio}\` successfully.`);
+
 			// @ts-ignore
-			logger.verbose(`SYNCER > Priority ${prio}, changed on ${interaction.channel.name} issue.`);
+			const chName = stripStatusFromThread(interaction.channel.name);
+
+			// @ts-ignore
+			logger.verbose(`SYNCER > Priority ${prio}, changed on ${chName} issue.`);
+
+			if (prio == 'Critical') {
+				// @ts-ignore
+				interaction.channel.setName(`🚩 - ${chName}`);
+			}
+
 			await interaction.reply({
 				embeds: [priorityEmbed],
 				ephemeral: true,

@@ -25,7 +25,7 @@ export const labelsWithEmojis = [
 	{ label: 'Done', value: 'done', emoji: '✅' },
 ];
 
-export const Priorities = [1, 2, 3];
+export const Priorities = ['Low', 'Medium', 'High', 'Critical'];
 
 export const Status = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
 

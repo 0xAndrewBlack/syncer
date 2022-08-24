@@ -24,6 +24,10 @@ export class ChangeStatus {
 	): Promise<void> {
 		const statusCleaned = status.replace('-', ' ');
 
+		// @ts-ignore
+		const issueName = stripStatusFromThread(interaction.channel.name);
+		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
+
 		const statusEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.SUCCESS)
 			.setTitle(`🧪 Status updated to \`${statusCleaned}\` successfully.`);
@@ -39,17 +43,19 @@ export class ChangeStatus {
 		await gh.editIssueLabel(stripStatusFromThread(interaction.channel.name), [statusCleaned], false);
 
 		const statusEmoji = labelsWithEmojis.find((labels) => labels.label === statusCleaned)?.emoji;
-		// @ts-ignore
-		const issueName = stripStatusFromThread(interaction.channel.name);
-		// @ts-ignore
-		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
 
 		if (statusCleaned === 'Done') {
 			// @ts-ignore
 			await interaction.channel?.setArchived(true);
 		}
 
-		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
+		// @ts-ignore
+		if (String(interaction.channel.name).startsWith('🚩')) {
+			return;
+		}
+
+		// @ts-ignore
+		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
 
 		return;
 	}

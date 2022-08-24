@@ -31,6 +31,7 @@ export class GitHubService {
 			token: config.GH_TOKEN,
 			fields: {
 				priority: 'Priority',
+				story: 'Story',
 			},
 		});
 		this.labels = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
@@ -294,7 +295,7 @@ export class GitHubService {
 		}
 	}
 
-	async setPriority(channel: string, prio: Number): Promise<object> {
+	async setPriority(channel: string, prio: string): Promise<any> {
 		const { github, project, repo, owner } = this;
 
 		const issue = await github.search.issuesAndPullRequests({
@@ -304,8 +305,14 @@ export class GitHubService {
 
 		const { node_id } = issue.data.items[0];
 
-		// @ts-ignore
-		return await project.items.updateByContentId(node_id, { priority: prio });
+		try {
+			// @ts-ignore
+			const projectWithPrio = await project.items.updateByContentId(node_id, { priority: prio });
+
+			return projectWithPrio as object;
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	async addAssignee(channel: string, assignee: string): Promise<object> {
