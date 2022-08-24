@@ -1,4 +1,4 @@
-import { createLogger, format, level, transports } from 'winston';
+import { createLogger, format, level, LogEntry, transports } from 'winston';
 
 const { printf, combine, colorize, timestamp, errors } = format;
 
@@ -21,7 +21,17 @@ const devLogFormat = printf((log) => {
 
 const logger = createLogger({
 	level: 'debug',
-	format: combine(colorize(), timestamp({ format: 'DD-MM-YYYY hh:mm:ss A' }), errors({ stack: true }), devLogFormat),
+	format: combine(
+		timestamp({ format: 'DD-MM-YYYY hh:mm:ss A' }),
+		format((logLevel: LogEntry) => {
+			logLevel.level = logLevel.level.toUpperCase();
+
+			return logLevel;
+		})(),
+		errors({ stack: true }),
+		colorize(),
+		devLogFormat
+	),
 	transports: [new transports.Console()],
 });
 
