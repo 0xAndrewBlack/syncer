@@ -93,17 +93,17 @@ export class ThreadHandler {
 		const newName = stripStatusFromThread(newThread.name);
 
 		gh.init();
+		const { node_id } = await gh.isIssueExists(stripStatusFromThread(newThread.name));
+		const project = await gh.getProject(node_id);
 
 		if (newThread.archived) {
 			logger.verbose('THREAD > Archived.');
-
-			const { node_id } = await gh.isIssueExists(newThread.name);
-			const project = await gh.getProject(node_id);
 
 			// Persistent thread if not already Done
 			if (project.fields.status != 'Done') {
 				newThread.setArchived(false);
 				newThread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+				logger.verbose('THREAD > Unarchived because issue is not Done yet.');
 			}
 
 			gh.toggleIssue(oldName);
