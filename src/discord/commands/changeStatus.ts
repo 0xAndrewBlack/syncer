@@ -43,11 +43,13 @@ export class ChangeStatus {
 		const issueName = stripStatusFromThread(interaction.channel.name);
 		// @ts-ignore
 		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
-		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
 
-		if (interaction.channel?.isThread()) {
-			interaction.channel.setArchived(true);
+		if (statusCleaned === 'Done') {
+			// @ts-ignore
+			await interaction.channel?.setArchived(true);
 		}
+
+		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
 
 		return;
 	}

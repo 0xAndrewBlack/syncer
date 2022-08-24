@@ -12,6 +12,8 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 	try {
 		await next();
 	} catch (error) {
+		logger.error(`❌ Guard Error: ${error}`);
+
 		if (error instanceof Error) {
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('⚠️ An error occurred.')
