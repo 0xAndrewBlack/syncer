@@ -101,11 +101,11 @@ export class ThreadHandler {
 			logger.verbose('THREAD > Archived.');
 
 			// Persistent thread if not already Done
-			if (project.fields.status != 'Done') {
-				newThread.setArchived(false);
-				newThread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
-				logger.verbose('THREAD > Unarchived because issue is not Done yet.');
-			}
+			// if (project.fields.status != 'Done') {
+			// 	newThread.setArchived(false);
+			// 	newThread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+			// 	logger.verbose('THREAD > Unarchived because issue is not Done yet.');
+			// }
 
 			gh.toggleIssue(oldName);
 			gh.toggleLockIssue(oldName);
