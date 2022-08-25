@@ -50,7 +50,8 @@ export class ThreadHandler {
 			}
 
 			const msg: any = await thread.fetchStarterMessage();
-			const { data } = await gh.createIssue(name, msg.content, [label]);
+			const body = `👤 Issue created by ${msg.author.username}#${msg.author.discriminator} - Check this [thread on discord](${thread.url}) for the whole conversation.\n\n---\n\n${msg.content}`;
+			const { data } = await gh.createIssue(name, body, [label]);
 
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
@@ -107,8 +108,8 @@ export class ThreadHandler {
 			// 	logger.verbose('THREAD > Unarchived because issue is not Done yet.');
 			// }
 
-			gh.toggleIssue(oldName);
-			gh.toggleLockIssue(oldName);
+			await gh.toggleIssue(oldName);
+			await gh.toggleLockIssue(oldName);
 
 			return;
 		}
@@ -116,13 +117,13 @@ export class ThreadHandler {
 		if (oldThread.archived && !newThread.archived) {
 			logger.verbose('THREAD > Unarchived.');
 
-			gh.toggleIssue(newName);
-			gh.toggleLockIssue(newName);
+			await gh.toggleIssue(newName);
+			await gh.toggleLockIssue(newName);
 
 			return;
 		}
 
-		gh.editIssueWoBody(oldName, newName);
+		await gh.editIssueWoBody(oldName, newName);
 	}
 	@On({ event: 'threadDelete' })
 	async onThreadDelete([thread]: ArgsOf<'threadDelete'>, client: Client): Promise<void> {
@@ -130,10 +131,10 @@ export class ThreadHandler {
 
 		logger.verbose(`THREAD > ${stripStatusFromThread(name)} deleted.`);
 
-		gh.init();
+		await gh.init();
 
-		gh.toggleIssue(name);
-		gh.toggleLockIssue(name);
+		await gh.toggleIssue(name);
+		await gh.toggleLockIssue(name);
 	}
 	@On({ event: 'threadListSync' })
 	async onThreadSync([threads]: ArgsOf<'threadListSync'>, client: Client): Promise<void> {
