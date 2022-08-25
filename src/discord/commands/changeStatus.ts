@@ -46,7 +46,11 @@ export class ChangeStatus {
 
 		if (statusCleaned === 'Done') {
 			// @ts-ignore
+			await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+			// @ts-ignore
 			await interaction.channel?.setArchived(true);
+
+			return;
 		}
 
 		// @ts-ignore
