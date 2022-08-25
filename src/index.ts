@@ -19,7 +19,7 @@ export class DiscordBot {
 		this.bot = new Client({
 			shards: 'auto',
 			logger: new botLogger(),
-			silent: String(config.NODE_ENV) !== 'development' ? true : false,
+			silent: String(config.NODE_ENV) !== 'development',
 			botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
 			intents: [
 				IntentsBitField.Flags.Guilds,
