@@ -15,6 +15,10 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 		logger.error(`Guard Error: ${error}`);
 
 		if (error instanceof Error) {
+			if (!interaction) {
+				return;
+			}
+
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('⚠️ An error occurred.')
 				.setDescription(`${error.message}`)
@@ -27,6 +31,10 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 
 			logger.warn(`${interaction.guild?.name} thrown ${error.name}.`);
 		} else {
+			if (!interaction) {
+				return;
+			}
+
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
 				.setDescription(`\`${JSON.stringify(error)}\``)
