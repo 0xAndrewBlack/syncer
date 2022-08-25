@@ -50,12 +50,12 @@ export class ChangeStatus {
 		}
 
 		// @ts-ignore
+		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+
+		// @ts-ignore
 		if (String(interaction.channel.name).startsWith('🚩')) {
 			return;
 		}
-
-		// @ts-ignore
-		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
 
 		return;
 	}
