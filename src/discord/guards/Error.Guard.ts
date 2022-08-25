@@ -12,7 +12,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 	try {
 		await next();
 	} catch (error) {
-		logger.error(`❌ Guard Error: ${error}`);
+		logger.error(`Guard Error: ${error}`);
 
 		if (error instanceof Error) {
 			const errorEmbed = new EmbedBuilder()
@@ -25,7 +25,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 				embeds: [errorEmbed],
 			});
 
-			logger.warn(`${interaction.guild?.name} thrown ${error.name} error.`);
+			logger.warn(`${interaction.guild?.name} thrown ${error.name}.`);
 		} else {
 			const errorEmbed = new EmbedBuilder()
 				.setTitle('❌ An error occurred.')
@@ -37,7 +37,7 @@ export const ErrorHandler: GuardFunction<CommandInteraction> = async (
 				embeds: [errorEmbed],
 			});
 
-			logger.error(`${interaction.guild?.name} thrown ${JSON.stringify(error)} error.`);
+			logger.error(`${interaction.guild?.name} thrown ${JSON.stringify(error)}.`);
 		}
 	}
 };

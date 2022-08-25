@@ -6,6 +6,7 @@ import { CommandInteraction } from 'discord.js';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
+import { UserError } from '../../interfaces/errorFactory.js';
 
 export const IsIssue: GuardFunction<CommandInteraction> = async (
 	interaction: CommandInteraction,
@@ -21,7 +22,7 @@ export const IsIssue: GuardFunction<CommandInteraction> = async (
 	const project = await gh.getCard(channelName);
 
 	if (!issue) {
-		throw new Error(`Issue not linked, use the \`/sync\` command to sync this thread to a new GitHub Issue.`);
+		throw new UserError(`Issue not linked, use the \`/sync\` command to sync this thread to a new GitHub Issue.`);
 	}
 
 	guardData.issue = issue;

@@ -9,6 +9,7 @@ import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 import { capitalize } from '../../utils/helpers.js';
+import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 export class ThreadHandler {
@@ -58,8 +59,8 @@ export class ThreadHandler {
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
 			issueObj.issueLink = data.html_url;
-		} catch (error: unknown) {
-			throw error;
+		} catch (error: Error | any) {
+			throw new APIError(error.message);
 		}
 
 		issueEmbed = new EmbedBuilder()

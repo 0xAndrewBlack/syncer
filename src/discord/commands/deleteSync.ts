@@ -9,6 +9,7 @@ import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
+import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread)
@@ -38,8 +39,8 @@ export class DeleteSync {
 			// .then((data) => {
 			// 	data.interaction.channel?.delete();
 			// });
-		} catch (error: unknown) {
-			throw error;
+		} catch (error: Error | any) {
+			throw new APIError(error.message);
 		}
 	}
 }

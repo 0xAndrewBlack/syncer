@@ -10,6 +10,7 @@ import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { users } from '../../utils/users.js';
+import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread)
@@ -30,7 +31,7 @@ export class IssueSettings {
 		status: string,
 		@SlashChoice(...Priorities)
 		@SlashOption({ name: 'priority', description: 'Issue priority', required: false })
-		prio: number,
+		prio: string,
 		@SlashOption({ name: 'label', description: 'Issue label', required: false }) label: string,
 		interaction: CommandInteraction
 	): Promise<void> {
@@ -76,8 +77,8 @@ export class IssueSettings {
 				embeds: [settingsEmbed],
 				ephemeral: true,
 			});
-		} catch (error: unknown) {
-			throw error;
+		} catch (error: Error | any) {
+			throw new APIError(error.message);
 		}
 	}
 }
