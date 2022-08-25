@@ -20,7 +20,7 @@ export class IssueStatus {
 		await gh.init();
 
 		const { number, html_url, body, labels, assignee } = guardData.issue;
-		const { status, priority } = guardData.project.fields;
+		const { status, priority, story } = guardData.project.fields;
 
 		const statusEmbed = new EmbedBuilder()
 			.setTitle('Issue Status')
@@ -34,25 +34,35 @@ export class IssueStatus {
 					inline: true,
 				},
 				{
+					name: 'Status',
+					value: `\`${status ? status : 'None.'}\``,
+					inline: true,
+				},
+				{
 					name: 'Priority',
-					value: `\`${priority ? priority : 'None'}\``,
+					value: `\`${priority ? priority : 'None.'}\``,
 					inline: true,
 				},
 				{
 					name: 'Label(s)',
 					value: `\`${labels.map((label: any) => label.name)}\``,
-					inline: false,
+					inline: true,
+				},
+				{
+					name: 'Story',
+					value: `\`${story ? story : 'No story.'}\``,
+					inline: true,
 				},
 				{
 					name: 'Assignee(s)',
 					value: `\`${assignee?.login ? assignee.login : `Not assigned.`}\``,
-					inline: false,
+					inline: true,
 				},
 			]);
 
 		logger.verbose(`SYNCER > Issue status queried for #${number} issue.`);
 
-		await interaction.reply({
+		interaction.reply({
 			embeds: [statusEmbed],
 			ephemeral: false,
 		});

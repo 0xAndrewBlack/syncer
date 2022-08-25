@@ -30,8 +30,10 @@ export class GitHubService {
 			number: config.GH_PROJECT_NUMBER,
 			token: config.GH_TOKEN,
 			fields: {
+				title: 'Title',
+				status: 'Status',
 				priority: 'Priority',
-				story: 'Story',
+				story: { name: 'Story', optional: true },
 			},
 		});
 		this.labels = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
@@ -52,7 +54,10 @@ export class GitHubService {
 			number: config.GH_PROJECT_NUMBER,
 			token: config.GH_TOKEN,
 			fields: {
+				title: 'Title',
+				status: 'Status',
 				priority: 'Priority',
+				story: { name: 'Story', optional: true },
 			},
 		});
 		this.labels = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
@@ -310,6 +315,26 @@ export class GitHubService {
 			const projectWithPrio = await project.items.updateByContentId(node_id, { priority: prio });
 
 			return projectWithPrio as object;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async setStory(channel: string, s: string): Promise<any> {
+		const { github, project, repo, owner } = this;
+
+		const issue = await github.search.issuesAndPullRequests({
+			q: `type:issue ${channel} repo:${owner}/${repo}`,
+			sort: 'created',
+		});
+
+		const { node_id } = issue.data.items[0];
+
+		try {
+			// @ts-ignore
+			const projectWithStory = await project.items.updateByContentId(node_id, { story: s });
+
+			return projectWithStory as object;
 		} catch (error) {
 			throw error;
 		}
