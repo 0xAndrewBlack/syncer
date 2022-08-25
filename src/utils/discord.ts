@@ -25,8 +25,8 @@ export const labelsWithEmojis = [
 	{ label: 'Done', value: 'done', emoji: '✅' },
 ];
 
+export const Stories = ['Guild Quest', 'POAP Drop'];
 export const Priorities = ['Low', 'Medium', 'High', 'Critical'];
-
 export const Status = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
 
 export const colors = {

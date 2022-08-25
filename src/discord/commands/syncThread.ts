@@ -48,11 +48,13 @@ export class SyncThread {
 				status = '🚩';
 				label = 'urgent';
 			}
-			const { data } = await gh.createIssue(
-				isUrgent ? stripStatusFromThread(name) : name,
-				isUrgent ? stripStatusFromThread(name) : name,
-				[label]
-			);
+
+			const body = `👤 Issue created by ${interaction.user.username}#${
+				interaction.user.discriminator
+			} - Check this [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${
+				isUrgent ? stripStatusFromThread(name) : name
+			}`;
+			const { data } = await gh.createIssue(isUrgent ? stripStatusFromThread(name) : name, body, [label]);
 
 			// @ts-ignore
 			interaction.channel.setName(`${status} - ${isUrgent ? stripStatusFromThread(name) : name}`);
