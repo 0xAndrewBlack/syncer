@@ -26,10 +26,6 @@ export class ThreadHandler {
 		const validChannels = [config.BUG_CHANNEL, config.IMP_CHANNEL];
 		const isValidChannel = validChannels?.includes(thread.parentId as any);
 
-		logger.debug(isValidChannel);
-		logger.debug(validChannels);
-		logger.debug(thread.parentId);
-
 		if (!isValidChannel) {
 			logger.warn('THREAD > Was created in an other channel.');
 
