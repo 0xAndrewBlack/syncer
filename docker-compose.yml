@@ -3,9 +3,11 @@ version: '3'
 services:
   syncer:
     init: true
-    container_name: discord_bot
-    hostname: discord_bot
+    container_name: syncer
+    hostname: syncer
     build: .
+    depends_on:
+      - database
     environment:
       - DC_BOT_TOKEN=${DC_BOT_TOKEN}
       - GUILD_ID=${GUILD_ID}
@@ -21,6 +23,38 @@ services:
     networks:
       botnet:
         ipv4_address: 10.10.13.3
+
+  database:
+    image: postgres:alpine
+    container_name: postgres
+    hostname: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: syncer
+      POSTGRES_DB: syncer-db
+      POSTGRES_PASSWORD: ${DB_PG_PASSWORD}
+    ports:
+      - 5432:5432
+      - 5433:5433
+    networks:
+      botnet:
+        ipv4_address: 10.10.13.4
+
+  pgadmin:
+    container_name: pgadmin
+    hostname: pgadmin
+    image: dpage/pgadmin4
+    restart: on-failure
+    depends_on:
+      - database
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@syncer.xyz
+      PGADMIN_DEFAULT_PASSWORD: ${DB_PG_AD_PASSWORD}
+    ports:
+      - '5050:80'
+    networks:
+      botnet:
+        ipv4_address: 10.10.13.5
 
 networks:
   botnet:
