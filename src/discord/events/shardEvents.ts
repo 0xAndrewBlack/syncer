@@ -20,10 +20,10 @@ export class ShardHandler {
 	}
 	@On({ event: 'shardReconnecting' })
 	async shardReconnect([shard]: ArgsOf<'shardReconnecting'>): Promise<void> {
-		logger.verbose(`Shard #${shard} is reconnecting.`);
+		logger.warn(`Shard #${shard} is reconnecting.`);
 	}
 	@On({ event: 'shardResume' })
 	async shardResume([shard]: ArgsOf<'shardResume'>): Promise<void> {
-		logger.warn(`Shard #${shard} is resumed.`);
+		logger.verbose(`Shard #${shard} is resumed.`);
 	}
 }
