@@ -26,7 +26,7 @@
 		"discord-cross-ratelimit": "^0.0.7",
 		"discord-hybrid-sharding": "^1.7.1",
 		"discord.js": "^14.2.0",
-		"discordx": "^11.1.8",
+		"discordx": "^11.1.11",
 		"dotenv": "^16.0.1",
 		"gitcord": "^1.0.3",
 		"github-project": "^2.2.0",
