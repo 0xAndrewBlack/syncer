@@ -29,7 +29,7 @@
 		"discordx": "^11.1.8",
 		"dotenv": "^16.0.1",
 		"gitcord": "^1.0.3",
-		"github-project": "^2.2.0",
+		"github-project": "^3.0.0",
 		"koa": "^2.13.4",
 		"koa-bodyparser": "^4.3.0",
 		"koa-json": "^2.0.2",
