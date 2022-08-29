@@ -20,6 +20,7 @@ jobs:
     environment: "Deployment"
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
+      - name: ⬇️ Checkout repo
       - uses: actions/checkout@v2
 
       - name: ⚙️ Setup buildx
@@ -72,7 +73,7 @@ jobs:
           docker pull wagoodman/dive:$DIVE_VERSION
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --mount type=bind,source="$(pwd)"/.github/.dive-ci,target=/.dive-ci,readonly wagoodman/dive:$DIVE_VERSION --ci app:latest --ci-config /.dive-ci
 
-      - name: Tag the container images
+      - name: 🏷️ Tag the container images
         run: |
           docker tag app:latest $IMAGE_ID:$VERSION
 

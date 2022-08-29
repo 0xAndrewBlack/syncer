@@ -1,4 +1,4 @@
+node_modules
+.github
 .env
 .env.example
-.github
-node_modules

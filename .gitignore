@@ -1,12 +1,12 @@
-# files
-.env
-.env.local
-yarn.lock
-
-# folders
+# Folders
 build
 dist
 node_modules
 
-# secrets
+# Files
+.env
+.env.local
+yarn.lock
+
+# Secrets
 *.pem
