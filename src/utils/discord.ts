@@ -27,7 +27,7 @@ export const labelsWithEmojis = [
 
 export const Stories = ['Guild Quest', 'POAP Drop'];
 export const Priorities = ['Low', 'Medium', 'High', 'Critical'];
-export const Status = ['Backlog', 'Todo', 'In-Progress', 'Testing', 'Done'];
+export const Status = ['Backlog', 'Todo', 'In Progress', 'Testing', 'Done'];
 
 export const colors = {
 	DC_EMBED_COLOR: '#6D0CE3',
