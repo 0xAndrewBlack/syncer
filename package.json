@@ -11,7 +11,7 @@
 		"local": "nodemon --exec node --loader ts-node/esm/transpile-only src/index.ts",
 		"build": "tsc",
 		"serve": "node dist/index.js",
-		"build:changelog": "npx @discordx/changelog --root=src"
+		"build:changelog": "npx @discordx/changelog --root=./"
 	},
 	"dependencies": {
 		"@discordx/importer": "^1.1.10",
@@ -25,7 +25,7 @@
 		"@prisma/client": "^4.2.1",
 		"discord-cross-ratelimit": "^0.0.7",
 		"discord-hybrid-sharding": "^1.7.1",
-		"discord.js": "^14.2.0",
+		"discord.js": "^14.3.0",
 		"discordx": "^11.1.8",
 		"dotenv": "^16.0.1",
 		"gitcord": "^1.0.3",
