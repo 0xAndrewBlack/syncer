@@ -64,6 +64,8 @@ The project is built with a few packages.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- RUNNING THE PROJECT -->
+
 ## 💨 Running the code
 
 ### Deploy
@@ -94,6 +96,8 @@ npm install
 | Locally       | Production                     |
 | ------------- | ------------------------------ |
 | `npm run dev` | `npm run build && npm run dev` |
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
