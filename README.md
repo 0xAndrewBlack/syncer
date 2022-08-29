@@ -46,6 +46,7 @@
 <!-- Soon coming back. -->
 
 <!-- ABOUT THE PROJECT -->
+
 ## ℹ️ About The Project
 
 Simple BOT to sync your Discord Threads with a GitHub repository and it's corresponding Issues and kanban Projects table.
@@ -65,17 +66,37 @@ The project is built with a few packages.
 
 ## 💨 Running the code
 
-Install dependencies
+### Deploy
+
+1. Create bot at [https://discord.com/developers](https://discord.com/developers)
+2. Claim a token
+3. Turn on the `Presence Intent` and `Message Intent` in the Privileged Gateway Intents settings
+4. Invite bot in guild with permission `8`.
+5. Give an Administrator role to the bot.
+6. Setup properly the environment variables.
+7. Have fun.
+
+### Requirements
+
+| Name       | Version   |
+| ---------- | --------- |
+| Node.js    | >= 16.6.0 |
+| TypeScript | >= 4.4.4  |
+
+### Install the dependencies
+
 ```bash
 npm install
 ```
 
-Run the bot
-```bash
-npm start
-```
+### Run the bot
+
+| Locally       | Production                     |
+| ------------- | ------------------------------ |
+| `npm run dev` | `npm run build && npm run dev` |
 
 <!-- CONTRIBUTING -->
+
 ## 🙌 Contributing
 
 Contributions are what makes the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -96,6 +117,7 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## 🎗️ License
 
 Distributed under the MIT License. See `LICENSE.md` for more information.
@@ -103,6 +125,7 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTACT -->
+
 ## ✉️ Contact
 
 Andrew Black / Andras Fekete - [@itslemonandrew](https://twitter.com/itslemonandrew) - andras@fekete.io
@@ -112,19 +135,21 @@ Project Link: [https://github.com/0xAndrewBlack/issue-bot](https://github.com/0x
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## 😎 Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. 
+Use this space to list resources you find helpful and would like to give credit to.
 I've included a few of my favorites to kick things off!
 
-* [README Template](https://github.com/0xAndrewBlack/issue-bot) - Readme template
-* [Choose an Open Source License](https://choosealicense.com) - License template
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet) - Emojis
+- [README Template](https://github.com/0xAndrewBlack/issue-bot) - Readme template
+- [Choose an Open Source License](https://choosealicense.com) - License template
+- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet) - Emojis
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/0xAndrewBlack/issue-bot.svg?style=for-the-badge
 [contributors-url]: https://github.com/0xAndrewBlack/issue-bot/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/0xAndrewBlack/issue-bot.svg?style=for-the-badge
