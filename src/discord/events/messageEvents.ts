@@ -15,7 +15,14 @@ export class MessageHandler {
 		// logger.verbose('Message Sent', client.user?.username, message.content);
 		// logger.verbose(stripStatusFromThread(String(message.content)));
 
-		if (message.channelId == config.DB_CHANNEL) {
+		if (message.channelId === config.DB_CHANNEL) {
+			logger.debug(message.channelId);
+			logger.debug(config.DB_CHANNEL);
+			logger.debug(message.channelId === config.DB_CHANNEL);
+			logger.debug(message.author?.id === config.DB_ID);
+			logger.debug(message.embeds[0].title === 'dependabot[bot]');
+			logger.debug(message.embeds[0].title);
+			logger.debug(message.embeds);
 			if (
 				message.embeds.length > 0 &&
 				message.author?.id == config.DB_ID &&
@@ -28,6 +35,7 @@ export class MessageHandler {
 	}
 	@On({ event: 'messageDelete' })
 	async onMessageDelete([message]: ArgsOf<'messageDelete'>, client: Client): Promise<void> {
-		logger.verbose(`MESSAGE > Deleted with content: ${message.content}`);
+		// @ts-ignore
+		logger.verbose(`MESSAGE > Deleted in ${message.channel.name}`);
 	}
 }
