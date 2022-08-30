@@ -33,6 +33,8 @@ services:
       POSTGRES_USER: syncer
       POSTGRES_DB: syncer-db
       POSTGRES_PASSWORD: ${DB_PG_PASSWORD}
+    volumes:
+      - ./deployment/scripts:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
       - 5433:5433

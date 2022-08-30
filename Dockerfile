@@ -11,6 +11,7 @@ RUN apk update --no-cache \
 # Move package.json
 COPY package*.json ./
 COPY tsconfig*.json ./
+COPY ./prisma ./prisma
 COPY ./src ./src
 
 # Install dependencies
@@ -29,6 +30,9 @@ COPY --chown=node:node --from=build-runner /tmp/app/node_modules /app/node_modul
 
 # Copy package.json from build-runner
 COPY --chown=node:node --from=build-runner /tmp/app/package.json /app/package.json
+
+# Copy Prisma config from build-runner
+COPY --chown=node:node --from=build-runner /tmp/app/prisma /app/prisma
 
 # Move build files
 COPY --chown=node:node --from=build-runner /tmp/app/dist /app/dist
