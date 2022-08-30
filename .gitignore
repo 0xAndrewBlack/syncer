@@ -4,6 +4,7 @@ dist
 node_modules
 
 # Files
+deployment/scripts/users.sql
 .env
 .env.local
 yarn.lock
