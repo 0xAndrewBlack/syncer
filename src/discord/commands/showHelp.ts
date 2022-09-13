@@ -16,9 +16,9 @@ export class ShowHelp {
 		const allCommands = getAllDiscordClasses();
 		const commands: any = allCommands
 			.filter((command) => {
-				// if (['help', 'assign'].includes(command.name)) {
-				// 	return false;
-				// }
+				if (['help'].includes(command.name)) {
+					return false;
+				}
 				return true;
 			})
 			.sort((a, b) => a.name.normalize().localeCompare(b.name.normalize()))
