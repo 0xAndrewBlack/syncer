@@ -27,7 +27,7 @@
   </a>
 
   <h3 align="center">Syncer</h3>
-  <h6><i>(Formerly syncer / GitHub Discord Sync)</i></h6>
+  <h6><i>(Formerly Issue-BOT / GitHub Discord Sync)</i></h6>
 
   <p align="center">
     An awesome Discord BOT to sync your projects!
