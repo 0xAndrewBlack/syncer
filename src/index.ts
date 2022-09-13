@@ -47,7 +47,7 @@ export class DiscordBot {
 		this.bot.on('ready', async () => {
 			this.bot.user?.setPresence({
 				activities: [{ name: 'over your guild.', type: ActivityType.Watching }],
-				status: 'dnd',
+				status: 'online',
 			});
 		});
 
