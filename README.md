@@ -32,7 +32,7 @@
   <p align="center">
     An awesome Discord BOT to sync your projects!
     <br />
-    <a href="https://github.com/0xAndrewBlack/issue-bot"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.syncer.xyz"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/0xAndrewBlack/issue-bot">View Demo</a>
