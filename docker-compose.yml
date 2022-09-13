@@ -58,6 +58,21 @@ services:
       botnet:
         ipv4_address: 10.10.13.5
 
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    build:
+      context: .
+      dockerfile: ./deployment/nginx.Dockerfile
+    ports:
+      - '80:80'
+    restart: always
+    depends_on:
+      - syncer
+    networks:
+      botnet:
+        ipv4_address: 10.10.13.6
+
 networks:
   botnet:
     driver: bridge

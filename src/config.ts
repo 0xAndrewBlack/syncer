@@ -14,6 +14,8 @@ if (!env.DC_BOT_TOKEN) {
 
 export const config = {
 	NODE_ENV: String(env.NODE_ENV),
+	API_PORT: Number(env.API_PORT) || 3000,
+	API_SECRET: String(env.API_SECRET) || 'secret',
 	DC_BOT_TOKEN: String(env.DC_BOT_TOKEN),
 	DC_COLORS: {
 		EMBED: Colors.Blurple,

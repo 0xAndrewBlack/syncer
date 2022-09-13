@@ -20,5 +20,6 @@
       "@events/*": ["src/discord/events/*"]
     },
   },
+  "resolveJsonModule": true,
   "exclude": ["node_modules", "build", "dist"]
 }

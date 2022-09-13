@@ -12,10 +12,15 @@ import { Client } from 'discordx';
 import { ErrorHandler } from './discord/guards/Error.Guard.js';
 import { botLogger } from './interfaces/loggerFactory.js';
 
+import { IssueServer } from './api/server.js';
+
 export class DiscordBot {
 	public static bot: Client;
 
+	public static api: IssueServer;
+
 	public static async start(): Promise<void> {
+		this.api = new IssueServer();
 		this.bot = new Client({
 			shards: 'auto',
 			logger: new botLogger(),
