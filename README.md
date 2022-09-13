@@ -22,12 +22,12 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/0xAndrewBlack/issue-bot">
+  <a href="https://github.com/0xAndrewBlack/syncer">
     <img src=".github/resources/Syncer.png" alt="Syncer Logo" width="300" height="300">
   </a>
 
   <h3 align="center">Syncer</h3>
-  <h6><i>(Formerly Issue-BOT / GitHub Discord Sync)</i></h6>
+  <h6><i>(Formerly syncer / GitHub Discord Sync)</i></h6>
 
   <p align="center">
     An awesome Discord BOT to sync your projects!
@@ -35,11 +35,11 @@
     <a href="https://docs.syncer.xyz"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/0xAndrewBlack/issue-bot">View Demo</a>
+    <a href="https://github.com/0xAndrewBlack/syncer">View Demo</a>
     ·
-    <a href="https://github.com/0xAndrewBlack/issue-bot/issues">Report Bug</a>
+    <a href="https://github.com/0xAndrewBlack/syncer/issues">Report Bug</a>
     ·
-    <a href="https://github.com/0xAndrewBlack/issue-bot/issues">Request Feature</a>
+    <a href="https://github.com/0xAndrewBlack/syncer/issues">Request Feature</a>
   </p>
 </div>
 
@@ -135,7 +135,7 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 Andrew Black / Andras Fekete - [@itslemonandrew](https://twitter.com/itslemonandrew) - andras@fekete.io
 
-Project Link: [https://github.com/0xAndrewBlack/issue-bot](https://github.com/0xAndrewBlack/issue-bot)
+Project Link: [https://github.com/0xAndrewBlack/syncer](https://github.com/0xAndrewBlack/syncer)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -146,7 +146,7 @@ Project Link: [https://github.com/0xAndrewBlack/issue-bot](https://github.com/0x
 Use this space to list resources you find helpful and would like to give credit to.
 I've included a few of my favorites to kick things off!
 
-- [README Template](https://github.com/0xAndrewBlack/issue-bot) - Readme template
+- [README Template](https://github.com/0xAndrewBlack/syncer) - Readme template
 - [Choose an Open Source License](https://choosealicense.com) - License template
 - [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet) - Emojis
 
@@ -155,13 +155,13 @@ I've included a few of my favorites to kick things off!
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/0xAndrewBlack/issue-bot.svg?style=for-the-badge
-[contributors-url]: https://github.com/0xAndrewBlack/issue-bot/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/0xAndrewBlack/issue-bot.svg?style=for-the-badge
-[forks-url]: https://github.com/0xAndrewBlack/issue-bot/network/members
-[stars-shield]: https://img.shields.io/github/stars/0xAndrewBlack/issue-bot.svg?style=for-the-badge
-[stars-url]: https://github.com/0xAndrewBlack/issue-bot/stargazers
-[issues-shield]: https://img.shields.io/github/issues/0xAndrewBlack/issue-bot.svg?style=for-the-badge
-[issues-url]: https://github.com/0xAndrewBlack/issue-bot/issues
-[license-shield]: https://img.shields.io/github/license/0xAndrewBlack/issue-bot.svg?style=for-the-badge
-[license-url]: https://github.com/0xAndrewBlack/issue-bot/blob/master/LICENSE.md
+[contributors-shield]: https://img.shields.io/github/contributors/0xAndrewBlack/syncer.svg?style=for-the-badge
+[contributors-url]: https://github.com/0xAndrewBlack/syncer/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/0xAndrewBlack/syncer.svg?style=for-the-badge
+[forks-url]: https://github.com/0xAndrewBlack/syncer/network/members
+[stars-shield]: https://img.shields.io/github/stars/0xAndrewBlack/syncer.svg?style=for-the-badge
+[stars-url]: https://github.com/0xAndrewBlack/syncer/stargazers
+[issues-shield]: https://img.shields.io/github/issues/0xAndrewBlack/syncer.svg?style=for-the-badge
+[issues-url]: https://github.com/0xAndrewBlack/syncer/issues
+[license-shield]: https://img.shields.io/github/license/0xAndrewBlack/syncer.svg?style=for-the-badge
+[license-url]: https://github.com/0xAndrewBlack/syncer/blob/master/LICENSE.md
