@@ -23,10 +23,11 @@
 <br />
 <div align="center">
   <a href="https://github.com/0xAndrewBlack/issue-bot">
-    <img src=".github/resources/Issue_BOT.png" alt="Logo" width="256" height="256">
+    <img src=".github/resources/Syncer.png" alt="Syncer Logo" width="300" height="300">
   </a>
 
-  <h3 align="center">Issue BOT</h3>
+  <h3 align="center">Syncer</h3>
+  <h6><i>(Formerly Issue-BOT / GitHub Discord Sync)</i></h6>
 
   <p align="center">
     An awesome Discord BOT to sync your projects!
@@ -93,9 +94,9 @@ npm install
 
 ### Run the bot
 
-| Locally       | Production                     |
-| ------------- | ------------------------------ |
-| `npm run dev` | `npm run build && npm run dev` |
+| Locally       | Production                   |
+| ------------- | ---------------------------- |
+| `npm run dev` | `npm run build && npm start` |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
