@@ -19,7 +19,7 @@ export class ThreadHandler {
 
 		thread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 
-		let label: string = 'backlog';
+		let label: string = '';
 		let issueEmbed: any;
 		let issueObj: any = {};
 
@@ -27,7 +27,7 @@ export class ThreadHandler {
 		const isValidChannel = validChannels?.includes(thread.parentId as any);
 
 		if (!isValidChannel) {
-			logger.warn('THREAD > Was created in an other channel.');
+			logger.warn('THREAD > Created in an other channel.');
 
 			return;
 		}
@@ -95,7 +95,7 @@ export class ThreadHandler {
 		const project = await gh.getProject(node_id);
 
 		if (newThread.archived) {
-			logger.verbose('THREAD > Archived.');
+			logger.verbose(`THREAD > Archived [${newThread.name}].`);
 
 			// Persistent thread if not already Done
 			// if (project.fields.status != 'Done') {
@@ -104,17 +104,17 @@ export class ThreadHandler {
 			// 	logger.verbose('THREAD > Unarchived because issue is not Done yet.');
 			// }
 
-			await gh.toggleIssue(oldName);
-			await gh.toggleLockIssue(oldName);
+			// await gh.toggleIssue(oldName);
+			// await gh.toggleLockIssue(oldName);
 
 			return;
 		}
 
 		if (oldThread.archived && !newThread.archived) {
-			logger.verbose('THREAD > Unarchived.');
+			logger.verbose(`THREAD > Unarchived [${newThread.name}].`);
 
-			await gh.toggleIssue(newName);
-			await gh.toggleLockIssue(newName);
+			// await gh.toggleIssue(newName);
+			// await gh.toggleLockIssue(newName);
 
 			return;
 		}

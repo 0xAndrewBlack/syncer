@@ -19,12 +19,14 @@ import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
-@Guard(IsThread, IsIssueLinked)
+@Guard(IsIssueLinked)
 export class SyncChannel {
 	@Slash({ name: 'syncthreads' })
 	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Syncs threads to a new GitHub issues.')
 	async syncThread(interaction: CommandInteraction): Promise<void> {
-		await interaction.reply({ content: 'Coming soon.', ephemeral: true });
+		const soonEmbed = new EmbedBuilder().setTitle('😉 Coming soon!').setColor(config.DC_COLORS.EMBED);
+
+		await interaction.reply({ embeds: [soonEmbed], ephemeral: true });
 	}
 }

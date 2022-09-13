@@ -122,9 +122,7 @@ export class GitHubService {
 			labels: [...label],
 		});
 
-		project.items.add(issue.data.node_id, {
-			status: 'Backlog',
-		});
+		project.items.add(issue.data.node_id);
 
 		return issue;
 	}
