@@ -1,22 +1,19 @@
-import logger from '../../utils/logger.js';
 import { config } from '../../config.js';
+import logger from '../../utils/logger.js';
 
-import type { RouterContext } from '@koa/router';
-import { Get, Middleware, Router } from '@discordx/koa';
+import type { NextFunction, Request, Response } from 'express';
+import { Controller, Middleware, Get, Post, Put, Delete, ClassMiddleware } from '@overnightjs/core';
+import { StatusCodes } from 'http-status-codes';
 
-import { Authenticated } from '../middlewares/Auth.middleware.js';
+import { authHandler } from '../middlewares/Auth.Middleware.js';
 
-@Router()
-export class Index {
-	@Get('/')
-	hello(ctx: RouterContext): void {
-		ctx.body = {
-			message: 'Hello',
-		};
-	}
-	@Get('/auth')
-	@Middleware(Authenticated)
-	auth(ctx: RouterContext): void {
-		ctx.body = 'Hello auth user!';
+@Controller('')
+@ClassMiddleware(authHandler)
+export class IndexController {
+	@Get()
+	async get(req: Request, res: Response, next: NextFunction) {
+		return res.status(StatusCodes.OK).json({
+			message: '👋',
+		});
 	}
 }
