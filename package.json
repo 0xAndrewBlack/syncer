@@ -1,6 +1,6 @@
 {
 	"name": "issue-bot",
-	"version": "0.7.1",
+	"version": "0.8.4",
 	"private": true,
 	"license": "MIT",
 	"type": "module",
