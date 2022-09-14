@@ -29,6 +29,6 @@ export class MessageHandler {
 	@On({ event: 'messageDelete' })
 	async onMessageDelete([message]: ArgsOf<'messageDelete'>, client: Client): Promise<void> {
 		// @ts-ignore
-		logger.verbose(`MESSAGE > Deleted in ${message.channel.name}`);
+		logger.verbose(`MESSAGE > Deleted in [${message.channel.name}]`);
 	}
 }

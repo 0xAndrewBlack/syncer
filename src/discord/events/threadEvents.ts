@@ -87,15 +87,22 @@ export class ThreadHandler {
 	}
 	@On({ event: 'threadUpdate' })
 	async onThreadUpdate([oldThread, newThread]: ArgsOf<'threadUpdate'>, client: Client): Promise<void> {
-		const oldName = stripStatusFromThread(oldThread.name);
-		const newName = stripStatusFromThread(newThread.name);
+		const oldChannelName = stripStatusFromThread(oldThread.name);
+		const newChannelName = stripStatusFromThread(newThread.name);
 
 		gh.init();
-		const { node_id } = await gh.isIssueExists(stripStatusFromThread(newThread.name));
+
+		const { node_id } = await gh.isIssueExists(newChannelName);
 		const project = await gh.getProject(node_id);
 
+		if (!oldThread.locked && newThread.locked) {
+			logger.verbose(`THREAD > Archived & Locked [${newChannelName}].`);
+
+			return;
+		}
+
 		if (newThread.archived) {
-			logger.verbose(`THREAD > Archived [${newThread.name}].`);
+			logger.verbose(`THREAD > Archived [${newChannelName}].`);
 
 			// Persistent thread if not already Done
 			// if (project.fields.status != 'Done') {
@@ -104,28 +111,31 @@ export class ThreadHandler {
 			// 	logger.verbose('THREAD > Unarchived because issue is not Done yet.');
 			// }
 
-			// await gh.toggleIssue(oldName);
-			// await gh.toggleLockIssue(oldName);
+			// await gh.toggleIssue(oldChannelName);
+			// await gh.toggleLockIssue(oldChannelName);
 
 			return;
 		}
 
 		if (oldThread.archived && !newThread.archived) {
-			logger.verbose(`THREAD > Unarchived [${newThread.name}].`);
+			logger.verbose(`THREAD > Unarchived [${newChannelName}].`);
 
-			// await gh.toggleIssue(newName);
-			// await gh.toggleLockIssue(newName);
+			// await gh.toggleIssue(newChannelName);
+			// await gh.toggleLockIssue(newChannelName);
 
 			return;
 		}
 
-		await gh.editIssueWoBody(oldName, newName);
+		await gh.editIssueWoBody(oldChannelName, newChannelName);
 	}
 	@On({ event: 'threadDelete' })
 	async onThreadDelete([thread]: ArgsOf<'threadDelete'>, client: Client): Promise<void> {
 		const { name } = thread;
 
-		logger.verbose(`THREAD > ${stripStatusFromThread(name)} deleted.`);
+		// @ts-ignore - Interaction name broken it exists but throws error
+		const channelName = stripStatusFromThread(interaction.channel?.name);
+
+		logger.verbose(`THREAD > [${channelName}] deleted.`);
 
 		await gh.init();
 
@@ -134,6 +144,6 @@ export class ThreadHandler {
 	}
 	@On({ event: 'threadListSync' })
 	async onThreadSync([threads]: ArgsOf<'threadListSync'>, client: Client): Promise<void> {
-		logger.verbose(`THREAD > ${threads.size} thread(s) were synced.`);
+		logger.verbose(`THREAD > [${threads.size}] thread(s) were synced.`);
 	}
 }
