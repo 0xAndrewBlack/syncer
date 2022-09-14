@@ -19,23 +19,31 @@ export class DeleteSync {
 	@Description('Deletes sync, issue and thread too.')
 	async deleteSync(interaction: CommandInteraction): Promise<void> {
 		try {
+			// @ts-ignore - Interaction name broken it exists but throws error
+			const channelName = stripStatusFromThread(interaction.channel?.name);
+
+			await gh.init();
+
 			const labelEmbed = new EmbedBuilder()
 				.setColor(config.DC_COLORS.SUCCESS)
 				// @ts-ignore
-				.setTitle(`🚮 Sync \`${stripStatusFromThread(interaction.channel.name)}\` deleted successfully.`);
-
-			await gh.init();
+				.setTitle(`🚮 Sync \`${channelName}\` deleted successfully.`)
+				.setDescription("Deletion is not possible though the API, it's just for the looks.");
 
 			// @ts-ignore
 			// await gh.deleteIssue(interaction.channel.name);
 			// @ts-ignore
-			logger.verbose(`SYNCER > Sync ${stripStatusFromThread(interaction.channel.name)} deleted thread/issue.`);
+			logger.verbose(`SYNCER > Sync Purged [${channelName}] thread/issue.`);
 			// @ts-ignore
-			await interaction.channel.setName(`🚮 - ${stripStatusFromThread(interaction.channel.name)}`);
+			await interaction.channel.setName(`🚮 - ${channelName}`);
 			await interaction.reply({
 				ephemeral: true,
 				embeds: [labelEmbed],
 			});
+			// @ts-ignore
+			interaction.channel.setLocked(true);
+			// @ts-ignore
+			interaction.channel.setArchived(true);
 			// .then((data) => {
 			// 	data.interaction.channel?.delete();
 			// });
