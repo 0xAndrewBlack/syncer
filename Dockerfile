@@ -35,7 +35,7 @@ COPY --chown=node:node --from=build-runner /tmp/app/package.json /app/package.js
 COPY --chown=node:node --from=build-runner /tmp/app/prisma /app/prisma
 
 # Move build files
-COPY --chown=node:node --from=build-runner /tmp/app/dist /app/dist
+COPY --chown=node:node --from=build-runner /tmp/app/build /app/build
 
 RUN deluser --remove-home node \
   && addgroup -S node -g 1001 \
@@ -52,4 +52,4 @@ ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 # Start the bot
-CMD [ "node", "dist/src/index.js", "--trace-warnings", "--no-warnings"]
+CMD [ "node", "--trace-warnings", "--no-warnings", "build/src/index.js" ]
