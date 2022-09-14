@@ -16,7 +16,7 @@ export class ShowHelp {
 		const allCommands = getAllDiscordClasses();
 		const commands: any = allCommands
 			.filter((command) => {
-				if (['help'].includes(command.name)) {
+				if (['help', 'syncthreads'].includes(command.name)) {
 					return false;
 				}
 				return true;
@@ -26,13 +26,15 @@ export class ShowHelp {
 				return { name: `\`/${command.name}\``, value: command.description, inline: true };
 			});
 
+		logger.verbose(`SYNCER > Help command used by [${interaction.user.username}].`);
+
 		const helpEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.EMBED)
 			.setTitle('🧸 Help')
 			.setDescription(`Here is a list of all the available commands.`)
 			.addFields([...commands])
 			.setFooter({
-				text: 'Sync by ZGEN. For more info mention Lemon#0933',
+				text: 'Syncer by ZGEN. For more info mention Lemon#0933',
 				iconURL: client.user?.displayAvatarURL(),
 			})
 			.setTimestamp();
@@ -41,7 +43,5 @@ export class ShowHelp {
 			embeds: [helpEmbed],
 			ephemeral: true,
 		});
-
-		logger.verbose(`SYNCER > Help command used by [${interaction.user.username}].`);
 	}
 }

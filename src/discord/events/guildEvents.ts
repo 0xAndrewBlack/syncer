@@ -43,7 +43,7 @@ export class GuildHandler {
 			])
 			.setThumbnail(String(client.user?.displayAvatarURL()))
 			.setFooter({
-				text: 'Sync by ZGEN.',
+				text: 'Syncer by ZGEN.',
 				iconURL: client.user?.displayAvatarURL(),
 			})
 			.setTimestamp();
