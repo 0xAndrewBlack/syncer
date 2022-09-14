@@ -22,6 +22,9 @@ export class SyncThread {
 		// @ts-ignore
 		const { name } = interaction.channel;
 
+		// @ts-ignore - Interaction name broken it exists but throws error
+		const channelName = stripStatusFromThread(interaction.channel?.name);
+
 		let label: string = 'backlog';
 		let issueEmbed: any;
 		let issueObj: any = {};
@@ -52,12 +55,12 @@ export class SyncThread {
 			const body = `👤 Issue created by ${interaction.user.username}#${
 				interaction.user.discriminator
 			} - Check this [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${
-				isUrgent ? stripStatusFromThread(name) : name
+				isUrgent ? channelName : name
 			}`;
-			const { data } = await gh.createIssue(isUrgent ? stripStatusFromThread(name) : name, body, [label]);
+			const { data } = await gh.createIssue(isUrgent ? channelName : name, body, [label]);
 
 			// @ts-ignore
-			interaction.channel.setName(`${status} - ${isUrgent ? stripStatusFromThread(name) : name}`);
+			interaction.channel.setName(`${status} - ${isUrgent ? channelName : name}`);
 
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
@@ -68,7 +71,7 @@ export class SyncThread {
 
 		issueEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.EMBED)
-			.setTitle(isUrgent ? stripStatusFromThread(name) : name)
+			.setTitle(isUrgent ? channelName : name)
 			.setURL(issueObj.issueLink)
 			.setDescription('Issue created.')
 			.addFields(
@@ -91,11 +94,11 @@ export class SyncThread {
 			});
 
 		// @ts-ignore
-		logger.verbose(`SYNCER > Thread ${interaction.channel.name} synced.`);
+		logger.verbose(`SYNCER > Thread [${interaction.channel.name}] synced.`);
 
 		const syncEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.SUCCESS)
-			.setTitle(`🔃 Issue \`${isUrgent ? stripStatusFromThread(name) : name}\` synced successfully.`);
+			.setTitle(`🔃 Issue \`${isUrgent ? channelName : name}\` synced successfully.`);
 
 		interaction.reply({
 			ephemeral: true,

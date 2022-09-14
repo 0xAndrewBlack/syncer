@@ -60,7 +60,7 @@ export class IssueStatus {
 				},
 			]);
 
-		logger.verbose(`SYNCER > Issue status queried for #${number} issue.`);
+		logger.verbose(`SYNCER > Issue status queried for [#${number}] issue.`);
 
 		interaction.reply({
 			embeds: [statusEmbed],

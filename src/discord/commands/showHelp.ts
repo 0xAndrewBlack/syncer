@@ -41,5 +41,7 @@ export class ShowHelp {
 			embeds: [helpEmbed],
 			ephemeral: true,
 		});
+
+		logger.verbose(`SYNCER > Help command used by [${interaction.user.username}].`);
 	}
 }

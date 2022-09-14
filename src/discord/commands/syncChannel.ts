@@ -28,5 +28,7 @@ export class SyncChannel {
 		const soonEmbed = new EmbedBuilder().setTitle('😉 Coming soon!').setColor(config.DC_COLORS.EMBED);
 
 		await interaction.reply({ embeds: [soonEmbed], ephemeral: true });
+
+		logger.verbose(`SYNCER > Sync command used by [${interaction.user.username}].`);
 	}
 }

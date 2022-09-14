@@ -24,6 +24,9 @@ export class ChangePriority {
 		interaction: CommandInteraction
 	): Promise<void> {
 		try {
+			// @ts-ignore
+			const channelName = stripStatusFromThread(interaction.channel.name);
+
 			gh.init();
 
 			// @ts-ignore - Interaction name broken it exists but throws error
@@ -34,14 +37,11 @@ export class ChangePriority {
 				.setTitle(`💈 Priority updated to \`${prio}\` successfully.`);
 
 			// @ts-ignore
-			const chName = stripStatusFromThread(interaction.channel.name);
-
-			// @ts-ignore
-			logger.verbose(`SYNCER > Priority ${prio}, changed on ${chName} issue.`);
+			logger.verbose(`SYNCER > Priority [${prio}], changed on [${channelName}] issue.`);
 
 			if (prio == 'Critical') {
 				// @ts-ignore
-				interaction.channel.setName(`🚩 - ${chName}`);
+				interaction.channel.setName(`🚩 - ${channelName}`);
 			}
 
 			await interaction.reply({

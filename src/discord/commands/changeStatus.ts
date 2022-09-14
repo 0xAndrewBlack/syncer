@@ -24,7 +24,10 @@ export class ChangeStatus {
 	): Promise<void> {
 		// @ts-ignore
 		const issueName = stripStatusFromThread(interaction.channel.name);
-		logger.verbose(`SYNCER > Status changed to ${status}, on ${issueName} issue.`);
+
+		gh.init();
+
+		logger.verbose(`SYNCER > Status changed to [${status}], on [${issueName}] issue.`);
 
 		const statusEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.SUCCESS)
@@ -35,10 +38,8 @@ export class ChangeStatus {
 			ephemeral: true,
 		});
 
-		gh.init();
-
 		// @ts-ignore
-		await gh.editIssueLabel(stripStatusFromThread(interaction.channel.name), [status], false);
+		await gh.editIssueLabel(issueName, [status], false);
 
 		const statusEmoji = labelsWithEmojis.find((labels) => labels.label === status)?.emoji;
 

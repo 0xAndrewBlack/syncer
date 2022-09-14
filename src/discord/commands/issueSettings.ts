@@ -77,7 +77,7 @@ export class IssueSettings {
 				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`🙏  \`${stripStatusFromThread(channelName)}\` issue updated successfully.`);
 
-			logger.verbose(`SYNCER > Issue ${stripStatusFromThread(channelName)} updated.`);
+			logger.verbose(`SYNCER > Issue [${stripStatusFromThread(channelName)}] updated.`);
 
 			await interaction.reply({
 				embeds: [settingsEmbed],
