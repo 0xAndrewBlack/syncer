@@ -12,7 +12,7 @@
     "importHelpers": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "Node",
-    "outDir": "./dist",
+    "outDir": "./build",
     "baseUrl": "./",
     "paths": {
       "@services/*": ["src/services"],
