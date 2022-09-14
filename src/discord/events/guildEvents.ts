@@ -9,7 +9,7 @@ import { EmbedBuilder } from 'discord.js';
 export class GuildHandler {
 	@On({ event: 'guildCreate' })
 	async onGuildCreate([guild]: ArgsOf<'guildCreate'>, client: Client): Promise<void> {
-		logger.verbose(`GUILD > ${guild.name} joined.`);
+		logger.verbose(`GUILD > [${guild.name}] joined.`);
 
 		const defaultChannel = guild.systemChannel;
 		const setUpEmbed = new EmbedBuilder()

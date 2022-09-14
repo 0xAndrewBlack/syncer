@@ -27,12 +27,17 @@ export class UpdateLabel {
 				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`🏷️ Label(s) set to \`${label}\` successfully.`);
 
+			// @ts-ignore - Interaction name broken it exists but throws error
+			const channelName = stripStatusFromThread(interaction.channel?.name);
+
 			await gh.init();
 
 			// @ts-ignore
-			await gh.editIssueLabel(stripStatusFromThread(interaction.channel.name), [...label.split(',')], true);
-			// @ts-ignore
-			logger.verbose(`SYNCER > Label ${label}, appended to ${interaction.channel.name} issue.`);
+			await gh.editIssueLabel(channelName, [...label.split(',')], true);
+			logger.verbose(
+				// @ts-ignore
+				`SYNCER > Label [${label}], appended to [${channelName}] issue.`
+			);
 			await interaction.reply({
 				ephemeral: true,
 				embeds: [labelEmbed],

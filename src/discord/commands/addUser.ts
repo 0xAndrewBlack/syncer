@@ -54,6 +54,6 @@ export class AddUser {
 			content: `${user.user_name} has been added to the user list.`,
 		});
 
-		logger.verbose(`${user.user_name} has been added to the user list by ${interaction.user.username}.`);
+		logger.verbose(`[${user.user_name}] has been added to the user list by [${interaction.user.username}].`);
 	}
 }

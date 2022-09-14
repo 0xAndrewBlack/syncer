@@ -26,6 +26,9 @@ export class EditStory {
 		interaction.deferReply();
 
 		try {
+			// @ts-ignore - Interaction name broken it exists but throws error
+			const channelName = stripStatusFromThread(interaction.channel?.name);
+
 			await gh.init();
 
 			// @ts-ignore - Interaction name broken it exists but throws error
@@ -36,10 +39,7 @@ export class EditStory {
 				.setTitle(`👄 Story updated to \`${story}\` successfully.`);
 
 			// @ts-ignore
-			const chName = stripStatusFromThread(interaction.channel.name);
-
-			// @ts-ignore
-			logger.verbose(`SYNCER > Story ${story}, changed on ${chName} issue.`);
+			logger.verbose(`SYNCER > Story [${story}], changed on [${channelName}] issue.`);
 
 			await interaction.reply({
 				embeds: [storyEmbed],

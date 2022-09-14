@@ -46,18 +46,20 @@ export class EditIssue {
 	@ModalComponent({ id: 'Edit Issue' })
 	async handle(interaction: ModalSubmitInteraction): Promise<void> {
 		const [issueTitle, issueBody] = ['issueTitle', 'issueBody'].map((id) => interaction.fields.getTextInputValue(id));
+		// @ts-ignore - Interaction name broken it exists but throws error
+		const channelName = stripStatusFromThread(interaction.channel?.name);
 		// @ts-ignore
 		const status = interaction.channel.name.split(' ')[0];
 		const body = `👤 Issue created by ${interaction.user.username}#${interaction.user.discriminator} - Check the [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${issueBody}`;
 		// @ts-ignore
-		await gh.editIssue(stripStatusFromThread(interaction.channel.name), issueTitle, body);
+		await gh.editIssue(channelName, issueTitle, body);
 
 		const issueEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.SUCCESS)
 			.setTitle(`✨ Issue \`${issueTitle}\` updated successfully.`);
 
 		// @ts-ignore
-		logger.verbose(`SYNCER > Issue ${issueTitle} changed.`);
+		logger.verbose(`SYNCER > Issue [${issueTitle}] changed.`);
 
 		await interaction.reply({
 			embeds: [issueEmbed],

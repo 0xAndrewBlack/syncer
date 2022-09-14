@@ -55,7 +55,7 @@ export class AddAssignee {
 				.setColor(config.DC_COLORS.SUCCESS)
 				.setTitle(`🧑 \`${assignee?.user_name}\` assigned to \`${channelName}\` issue successfully.`);
 
-			logger.verbose(`SYNCER > Asignee ${assignee?.user_name}, assigned to ${channelName} issue.`);
+			logger.verbose(`SYNCER > Asignee [${assignee?.user_name}], assigned to [${channelName}] issue.`);
 
 			await interaction.reply({
 				content: `🧑 <@${assignee?.user_id}> you have been assigned.`,
