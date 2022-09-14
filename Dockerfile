@@ -52,4 +52,4 @@ ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 # Start the bot
-CMD [ "node", "dist/src/index.js"]
+CMD [ "node", "dist/src/index.js", "--trace-warnings", "--no-warnings"]

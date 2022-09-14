@@ -8,7 +8,7 @@
 	"scripts": {
 		"start": "node dist/src/index.js",
 		"build": "tsc --resolveJsonModule",
-		"dev": "nodemon --exec node --loader ts-node/esm/transpile-only src/index.ts",
+		"dev": "nodemon --exec node --loader ts-node/esm/transpile-only --trace-warnings --no-warnings src/index.ts",
 		"build:changelog": "npx @discordx/changelog --root=./"
 	},
 	"dependencies": {

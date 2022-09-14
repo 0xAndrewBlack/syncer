@@ -61,6 +61,8 @@ export class DiscordBot {
 		});
 
 		this.bot.on('interactionCreate', (interaction: Interaction) => {
+			// @ts-ignore
+			logger.verbose(`SYNCER > [${interaction?.user?.username}] ran a command >>> [${interaction?.commandName}]`);
 			this.bot.executeInteraction(interaction);
 		});
 

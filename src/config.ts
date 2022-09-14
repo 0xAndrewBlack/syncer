@@ -17,6 +17,7 @@ export const config = {
 	API_PORT: Number(env.API_PORT) || 3000,
 	API_SECRET: String(env.API_SECRET) || 'secret',
 	DC_BOT_TOKEN: String(env.DC_BOT_TOKEN),
+	DC_DEV_ID: String(env.DC_DEV_ID),
 	DC_COLORS: {
 		EMBED: Colors.Blurple,
 		SUCCESS: Colors.Green,
