@@ -17,11 +17,9 @@ export class EditIssue {
 	@Slash({ name: 'issue' })
 	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Edits issue title and body via a modal.')
-	async attachment(interaction: CommandInteraction): Promise<void> {
-		// Create the modal
+	async showModal(interaction: CommandInteraction): Promise<void> {
 		const modal = new ModalBuilder().setTitle('Edit Issue').setCustomId('Edit Issue');
 
-		// Create text input fields
 		const issueTitle = new TextInputBuilder()
 			.setCustomId('issueTitle')
 			.setLabel('Issue Title')
@@ -36,15 +34,13 @@ export class EditIssue {
 
 		const row3 = new ActionRowBuilder<TextInputBuilder>().addComponents(issueBody);
 
-		// Add action rows to form
 		modal.addComponents(row2, row3);
 
-		// Present the modal to the user
 		interaction.showModal(modal);
 	}
 
 	@ModalComponent({ id: 'Edit Issue' })
-	async handle(interaction: ModalSubmitInteraction): Promise<void> {
+	async handleModal(interaction: ModalSubmitInteraction): Promise<void> {
 		const [issueTitle, issueBody] = ['issueTitle', 'issueBody'].map((id) => interaction.fields.getTextInputValue(id));
 		// @ts-ignore - Interaction name broken it exists but throws error
 		const channelName = stripStatusFromThread(interaction.channel?.name);
