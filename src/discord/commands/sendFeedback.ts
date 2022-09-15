@@ -26,7 +26,7 @@ export class SendCommand {
 	@Slash({ name: 'feedback' })
 	@Guard(PermissionGuard(['SendMessages']))
 	@Description('Send feedback to the developers.')
-	modal(interaction: CommandInteraction): void {
+	async showModal(interaction: CommandInteraction): Promise<void> {
 		logger.verbose(`SYNCER > Feedback command used by [${interaction.user.username}].`);
 
 		const modal = new ModalBuilder().setTitle('🧸 Feedback Form').setCustomId('FeedbackForm');
@@ -50,8 +50,8 @@ export class SendCommand {
 		interaction.showModal(modal);
 	}
 
-	@ModalComponent()
-	async FeedbackForm(interaction: ModalSubmitInteraction): Promise<void> {
+	@ModalComponent({ id: 'FeedbackForm' })
+	async handleModal(interaction: ModalSubmitInteraction): Promise<void> {
 		const [feedbackCategory, feedbackDescription] = ['feedbackCategory', 'feedbackDescription'].map((id) =>
 			interaction.fields.getTextInputValue(id)
 		);
