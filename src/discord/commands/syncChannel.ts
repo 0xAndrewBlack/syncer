@@ -19,7 +19,6 @@ import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 
 @Discord()
-@Guard(IsIssueLinked)
 export class SyncChannel {
 	@Slash({ name: 'syncthreads' })
 	@Guard(PermissionGuard(['SendMessages']))

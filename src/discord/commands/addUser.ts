@@ -10,7 +10,7 @@ import { db } from '../../utils/helpers.js';
 export class AddUser {
 	@Slash({ name: 'adduser' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description(`Adds user to db.`)
+	@Description(`Adds user to db. (Admins only)`)
 	async addUser(
 		@SlashOption({
 			name: 'username',

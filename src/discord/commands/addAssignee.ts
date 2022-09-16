@@ -18,7 +18,7 @@ import { db } from '../../utils/helpers.js';
 export class AddAssignee {
 	@Slash({ name: 'assign' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Adds user to the issue.')
+	@Description('Adds mentioned user to the issue.')
 	async addAssignee(
 		@SlashOption({
 			name: 'username',

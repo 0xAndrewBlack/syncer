@@ -25,7 +25,7 @@ import { DiscordBot } from '../../index.js';
 export class SendCommand {
 	@Slash({ name: 'feedback' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Send feedback to the developers.')
+	@Description('Sends feedback to the developers.')
 	async showModal(interaction: CommandInteraction): Promise<void> {
 		logger.verbose(`SYNCER > Feedback command used by [${interaction.user.username}].`);
 
