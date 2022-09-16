@@ -19,6 +19,8 @@ export class ThreadHandler {
 
 		thread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 
+		const starterMessage = await (await thread.messages.fetch({ cache: false, limit: 1 })).first();
+
 		let label: string = '';
 		let issueEmbed: any;
 		let issueObj: any = {};
@@ -45,7 +47,7 @@ export class ThreadHandler {
 				label = 'improvement';
 			}
 
-			const msg: any = await thread.fetchStarterMessage();
+			const msg: any = starterMessage;
 			const body = `👤 Issue created by ${msg.author.username}#${msg.author.discriminator} - Check this [thread on discord](${thread.url}) for the whole conversation.\n\n---\n\n${msg.content}`;
 			const { data } = await gh.createIssue(name, body, [label]);
 

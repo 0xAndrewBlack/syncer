@@ -52,11 +52,11 @@ export class SyncThread {
 				label = 'urgent';
 			}
 
-			const body = `👤 Issue created by ${interaction.user.username}#${
-				interaction.user.discriminator
-			} - Check this [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${
-				isUrgent ? channelName : name
-			}`;
+			// @ts-ignore
+			const starterMessage = await (await interaction.channel?.messages.fetch({ cache: false, limit: 1 })).first();
+
+			const issueBody = starterMessage?.content;
+			const body = `👤 Issue created by ${interaction.user.username}#${interaction.user.discriminator} - Check this [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${issueBody}`;
 			const { data } = await gh.createIssue(isUrgent ? channelName : name, body, [label]);
 
 			// @ts-ignore
