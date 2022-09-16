@@ -15,7 +15,7 @@ import { IsThread } from '../guards/IsThread.Guard.js';
 export class ChangeStatus {
 	@Slash({ name: 'status' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sets status.')
+	@Description('Sets status, on Done the thread will close.')
 	async changePriority(
 		@SlashChoice(...Status)
 		@SlashOption({ name: 'status', description: 'Issue status', required: true })

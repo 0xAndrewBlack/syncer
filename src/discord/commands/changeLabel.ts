@@ -16,7 +16,7 @@ import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 export class UpdateLabel {
 	@Slash({ name: 'label' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sets label.')
+	@Description('Appends label(s), delimit by comma dont add spaces between.')
 	async changePriority(
 		@SlashOption({ name: 'label', description: 'Issue label', required: true })
 		label: string,

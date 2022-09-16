@@ -16,7 +16,7 @@ import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 export class DeleteSync {
 	@Slash({ name: 'purge' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Deletes sync, issue and thread too.')
+	@Description('Deletes sync, issue and thread will be marked as deleted (Cant delete through the API).')
 	async deleteSync(interaction: CommandInteraction): Promise<void> {
 		try {
 			// @ts-ignore - Interaction name broken it exists but throws error
