@@ -13,3 +13,16 @@ model users {
   discord_handle String? @db.VarChar(64)
   github_handle  String? @db.VarChar(64)
 }
+
+model threads {
+  id            String @id @db.VarChar(128)
+  channel_name  String @db.VarChar(64)
+  added         DateTime @db.Date
+  status        status[]
+  ping          Boolean
+}
+
+enum status {
+  open
+  closed
+}
