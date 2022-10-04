@@ -9,6 +9,7 @@ import { Status, labelsWithEmojis, stripStatusFromThread } from '../../utils/dis
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
+import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
 @Guard(IsThread)
@@ -46,6 +47,7 @@ export class ChangeStatus {
 		if (status === 'Done') {
 			// @ts-ignore
 			await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+			UptimeService.removeChannel(interaction.channel);
 			// @ts-ignore
 			await interaction.channel?.setArchived(true);
 

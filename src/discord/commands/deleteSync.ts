@@ -10,6 +10,7 @@ import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
 @Guard(IsThread)
@@ -40,6 +41,7 @@ export class DeleteSync {
 				ephemeral: true,
 				embeds: [labelEmbed],
 			});
+			UptimeService.removeChannel(interaction.channel);
 			// @ts-ignore
 			interaction.channel.setLocked(true);
 			// @ts-ignore

@@ -11,6 +11,7 @@ import { gh } from '../../services/githubService.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
 @Guard(IsThread, IsIssueLinked)
@@ -20,7 +21,7 @@ export class SyncThread {
 	@Description('Syncs thread to a new GitHub issue.')
 	async syncThread(interaction: CommandInteraction): Promise<void> {
 		// @ts-ignore
-		const { name } = interaction.channel;
+		const { name }: string = interaction.channel;
 
 		// @ts-ignore - Interaction name broken it exists but throws error
 		const channelName = stripStatusFromThread(interaction.channel?.name);
@@ -28,7 +29,7 @@ export class SyncThread {
 		let label: string = 'backlog';
 		let issueEmbed: any;
 		let issueObj: any = {};
-		let isUrgent = String(name).startsWith('🚩');
+		let isUrgent = name.startsWith('🚩');
 
 		try {
 			// @ts-ignore
@@ -65,6 +66,8 @@ export class SyncThread {
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
 			issueObj.issueLink = data.html_url;
+
+			await UptimeService.addChannel(interaction.channel);
 		} catch (error: Error | any) {
 			throw new APIError(error.message);
 		}

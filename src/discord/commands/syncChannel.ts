@@ -17,8 +17,10 @@ import { gh } from '../../services/githubService.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { IsDisabled } from '../guards/IsDisabled.Guard.js';
 
 @Discord()
+@Guard(IsDisabled)
 export class SyncChannel {
 	@Slash({ name: 'syncthreads' })
 	@Guard(PermissionGuard(['SendMessages']))
