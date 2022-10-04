@@ -7,6 +7,18 @@ datasource db {
   url      = env("DB_URL")
 }
 
+model guilds {
+  id                String @id @db.VarChar(128)
+  wel_channel_id    String @db.VarChar(128)
+  imp_channel_id    String @db.VarChar(128)
+  bug_channel_id    String @db.VarChar(128)
+  gh_token          String @db.VarChar(128)
+  gh_owner          String @db.VarChar(128)
+  gh_repo           String @db.VarChar(128)
+  gh_project_number Int    @db.Integer()
+  iv_vector         String @db.VarChar(128)
+}
+
 model users {
   user_id        String  @id @db.VarChar(128)
   user_name      String? @db.VarChar(64)
@@ -15,11 +27,11 @@ model users {
 }
 
 model threads {
-  id            String @id @db.VarChar(128)
-  channel_name  String @db.VarChar(64)
-  added         DateTime @db.Date
-  status        status[]
-  ping          Boolean
+  id       String   @id @db.VarChar(128)
+  guild_id String   @db.VarChar(128)
+  added    DateTime @db.Date
+  status   status[]
+  ping     Boolean
 }
 
 enum status {
