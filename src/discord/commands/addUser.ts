@@ -3,13 +3,14 @@ import logger from '../../utils/logger.js';
 
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, GuildMember } from 'discord.js';
 import { Description, PermissionGuard } from '@discordx/utilities';
-import { Client, Discord, Guard, Slash, SlashOption } from 'discordx';
+import { Client, Discord, Guard, Guild, Slash, SlashOption } from 'discordx';
 import { db } from '../../utils/helpers.js';
+import { IsDevGuard } from '../guards/IsDev.Guard.js';
 
 @Discord()
+@Guard(IsDevGuard)
 export class AddUser {
 	@Slash({ name: 'adduser' })
-	@Guard(PermissionGuard(['SendMessages']))
 	@Description(`Adds user to db. (Admins only)`)
 	async addUser(
 		@SlashOption({

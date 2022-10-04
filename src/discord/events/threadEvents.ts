@@ -10,6 +10,8 @@ import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 import { capitalize } from '../../utils/helpers.js';
 import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { DiscordBot } from 'src/index.js';
+import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
 export class ThreadHandler {
@@ -53,11 +55,13 @@ export class ThreadHandler {
 
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
-			thread.setName(`${status} - ${name}`);
+			await thread.setName(`${status} - ${name}`);
 
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];
 			issueObj.issueLink = data.html_url;
+
+			await UptimeService.addChannel(thread);
 		} catch (error: Error | any) {
 			throw new APIError(error.message);
 		}
@@ -100,11 +104,15 @@ export class ThreadHandler {
 		if (!oldThread.locked && newThread.locked) {
 			logger.verbose(`THREAD > Archived & Locked [${newChannelName}].`);
 
+			UptimeService.removeChannel(newThread);
+
 			return;
 		}
 
 		if (newThread.archived) {
 			logger.verbose(`THREAD > Archived [${newChannelName}].`);
+
+			UptimeService.removeChannel(newThread);
 
 			// Persistent thread if not already Done
 			// if (project.fields.status != 'Done') {
@@ -121,6 +129,8 @@ export class ThreadHandler {
 
 		if (oldThread.archived && !newThread.archived) {
 			logger.verbose(`THREAD > Unarchived [${newChannelName}].`);
+
+			UptimeService.addChannel(newThread);
 
 			// await gh.toggleIssue(newChannelName);
 			// await gh.toggleLockIssue(newChannelName);
@@ -143,6 +153,8 @@ export class ThreadHandler {
 
 		await gh.toggleIssue(name);
 		await gh.toggleLockIssue(name);
+
+		UptimeService.removeChannel(thread);
 	}
 	@On({ event: 'threadListSync' })
 	async onThreadSync([threads]: ArgsOf<'threadListSync'>, client: Client): Promise<void> {

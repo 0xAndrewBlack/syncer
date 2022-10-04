@@ -18,6 +18,8 @@ export const config = {
 	API_SECRET: String(env.API_SECRET) || 'secret',
 	DC_BOT_TOKEN: String(env.DC_BOT_TOKEN),
 	DC_DEV_ID: String(env.DC_DEV_ID),
+	DC_DEV_SERVER: String(env.DC_DEV_SERVER),
+	DC_PING_PATTERN: String(env.DC_PING_PATTERN) || '0 8 * * *',
 	DC_COLORS: {
 		EMBED: Colors.Blurple,
 		SUCCESS: Colors.Green,
