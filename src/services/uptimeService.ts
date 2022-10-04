@@ -29,7 +29,7 @@ export abstract class UptimeService {
 			this.addChannel({ id, guild_id, status });
 		});
 
-		this.jobQueue = new CronJob(config.DC_PING_PATTERN, async () => {
+		this.jobQueue = new CronJob('0 8 * * *', async () => {
 			logger.verbose(`PINGER > Pinging ${this.channels.size} channels...`);
 
 			if (this.channels.size === 0) {
