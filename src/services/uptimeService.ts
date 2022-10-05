@@ -50,9 +50,7 @@ export abstract class UptimeService {
 	}
 
 	public static async addChannel(channel: any): Promise<void> {
-		logger.info(`PINGER > Adding a channel to the ping list...`);
-
-		const channels = await prisma.threads.upsert({
+		const fetchedChannels = await prisma.threads.upsert({
 			create: {
 				id: channel.id,
 				guild_id: channel.guild_id ? channel.guild_id : channel.guildId,
@@ -72,13 +70,15 @@ export abstract class UptimeService {
 			},
 		});
 
-		const { id, status, ping } = channels;
+		const { id, status, ping } = fetchedChannels;
 
 		this.channels.set(id, ping);
+
+		logger.info(`PINGER > Adding a channel to the ping list...`);
 	}
 
 	public static async removeChannel(channel: any): Promise<void> {
-		const ch = await prisma.threads.findUnique({
+		const fetchedChannel = await prisma.threads.findUnique({
 			where: {
 				id: channel.id,
 			},
@@ -90,17 +90,21 @@ export abstract class UptimeService {
 			},
 		});
 
-		if (!ch) return;
+		if (!fetchedChannel) return;
 
-		if (!this.channels.has(ch.id)) {
-			logger.info(`PINGER > Channel [${ch.id}] is not in the ping list!`);
+		if (!this.channels.has(fetchedChannel.id)) {
+			logger.info(`PINGER > Channel [${fetchedChannel.id}] is not in the ping list!`);
 
 			return;
 		}
 
-		await prisma.threads.delete({
+		await prisma.threads.update({
+			data: {
+				ping: false,
+				status: 'closed',
+			},
 			where: {
-				id: channel.id,
+				id: fetchedChannel.id,
 			},
 		});
 
@@ -110,11 +114,11 @@ export abstract class UptimeService {
 	}
 
 	public static async pingChannel(channel: any): Promise<void> {
-		const ch = await DiscordBot.bot.channels.fetch(channel.id);
+		const channelToPing = await DiscordBot.bot.channels.fetch(channel.id);
 
-		if (!ch) return;
+		if (!channelToPing) return;
 
-		if (!ch.isThread()) {
+		if (!channelToPing.isThread()) {
 			logger.error('PINGER > Channel is not a thread!');
 
 			UptimeService.removeChannel(channel);
@@ -128,8 +132,8 @@ export abstract class UptimeService {
 			return;
 		}
 
-		ch.setArchived(false);
-		ch.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+		channelToPing.setArchived(false);
+		channelToPing.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 	}
 
 	public static async statusIsDone(ch: any): Promise<boolean> {
