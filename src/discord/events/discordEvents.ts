@@ -10,7 +10,7 @@ export class DiscordEventHandler {
 	async rateLimited([rateLimitData]: RestArgsOf<'rateLimited'>): Promise<void> {
 		const { limit, url, hash, majorParameter, method, route, timeToReset, global } = rateLimitData;
 
-		logger.warn(JSON.stringify(rateLimitData));
+		logger.warn(`Rate limited for ${limit} requests to [${url}] - [${route}] - [${hash}]`);
 	}
 	@On({ event: 'debug' })
 	async debug([debugData]: ArgsOf<'debug'>): Promise<void> {
