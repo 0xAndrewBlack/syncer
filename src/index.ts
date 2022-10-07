@@ -10,7 +10,7 @@ import { ActivityType } from 'discord.js';
 import { Client } from 'discordx';
 
 import { ErrorHandler } from './discord/guards/Error.Guard.js';
-import { botLogger } from './interfaces/loggerFactory.js';
+import { BotLogger } from './interfaces/loggerFactory.js';
 
 import { IssueServer } from './api/server.js';
 import { UptimeService } from './services/uptimeService.js';
@@ -27,7 +27,7 @@ export class DiscordBot {
 		this.api = new IssueServer();
 		this.bot = new Client({
 			shards: 'auto',
-			logger: new botLogger(),
+			logger: new BotLogger(),
 			silent: String(config.NODE_ENV) !== 'development',
 			botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
 			intents: [

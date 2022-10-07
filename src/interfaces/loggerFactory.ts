@@ -3,7 +3,7 @@ import logger from '../utils/logger.js';
 
 import { ILogger } from 'discordx';
 
-export class botLogger implements ILogger {
+export class BotLogger implements ILogger {
 	public error(...args: unknown[]): void {
 		logger.error(args);
 	}
