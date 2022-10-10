@@ -11,3 +11,7 @@ yarn.lock
 
 # Secrets
 *.pem
+
+# Logs
+logs
+*.log
