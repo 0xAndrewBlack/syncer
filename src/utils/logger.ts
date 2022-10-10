@@ -1,4 +1,4 @@
-import { createLogger, format, level, LogEntry, transports } from 'winston';
+import { createLogger, format, LogEntry, transports } from 'winston';
 
 const { printf, combine, colorize, timestamp, errors } = format;
 
@@ -32,7 +32,10 @@ const logger = createLogger({
 		colorize(),
 		devLogFormat
 	),
-	transports: [new transports.Console()],
+	transports: [
+		new transports.Console({ level: 'debug' }),
+		new transports.File({ filename: 'logs/combined.log', level: 'debug' }),
+	],
 });
 
 export default logger;

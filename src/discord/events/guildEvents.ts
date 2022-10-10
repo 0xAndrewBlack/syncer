@@ -50,4 +50,16 @@ export class GuildHandler {
 
 		defaultChannel?.send({ embeds: [setUpEmbed] });
 	}
+	@On({ event: 'guildDelete' })
+	async onGuildDelete([guild]: ArgsOf<'guildDelete'>): Promise<void> {
+		logger.verbose(`GUILD > [${guild.name}] left.`);
+	}
+	@On({ event: 'guildUnavailable' })
+	async onGuildUnavailable([guild]: ArgsOf<'guildUnavailable'>): Promise<void> {
+		logger.verbose(`GUILD > [${guild.name}] is unavailable.`);
+	}
+	@On({ event: 'guildUpdate' })
+	async onGuildUpdate([oldGuild, newGuild]: ArgsOf<'guildUpdate'>): Promise<void> {
+		logger.verbose(`GUILD > [${oldGuild.name}] updated.`);
+	}
 }

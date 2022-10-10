@@ -10,22 +10,15 @@ import {
 	TextInputStyle,
 	ModalSubmitInteraction,
 } from 'discord.js';
-import { Description, PermissionGuard } from '@discordx/utilities';
-import { Client, Discord, Guard, ModalComponent, Slash } from 'discordx';
+import { PermissionGuard } from '@discordx/utilities';
+import { Discord, Guard, ModalComponent, Slash } from 'discordx';
 
-import { labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
-import { gh } from '../../services/githubService.js';
-
-import { IsThread } from '../guards/IsThread.Guard.js';
-import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 import { DiscordBot } from '../../index.js';
 
 @Discord()
 export class SendCommand {
-	@Slash({ name: 'feedback' })
+	@Slash({ name: 'feedback', description: 'Sends feedback to the developers.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sends feedback to the developers.')
 	async showModal(interaction: CommandInteraction): Promise<void> {
 		logger.verbose(`SYNCER > Feedback command used by [${interaction.user.username}].`);
 

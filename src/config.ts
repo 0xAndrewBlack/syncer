@@ -2,7 +2,6 @@ import { env } from 'process';
 
 import dotenv from 'dotenv';
 
-import { colors } from './utils/discord.js';
 import { EnvironmentError } from './interfaces/errorFactory.js';
 import { Colors } from 'discord.js';
 

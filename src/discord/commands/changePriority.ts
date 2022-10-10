@@ -1,25 +1,29 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread)
 export class ChangePriority {
-	@Slash({ name: 'priority' })
+	@Slash({ name: 'priority', description: 'Sets priority' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sets priority.')
 	async changePriority(
 		@SlashChoice(...Priorities)
-		@SlashOption({ name: 'priority', description: 'Issue priority', required: true })
+		@SlashOption({
+			name: 'priority',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue priority',
+			required: true,
+		})
 		prio: string,
 		interaction: CommandInteraction
 	): Promise<void> {

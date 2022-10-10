@@ -2,22 +2,24 @@ import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Discord, Guard, Slash, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { Discord, Guard, Slash } from 'discordx';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
 @Guard(IsThread)
 export class DeleteSync {
-	@Slash({ name: 'purge' })
+	@Slash({
+		name: 'purge',
+		description: 'Deletes sync, issue and thread will be marked as deleted (Cant delete through the API).',
+	})
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Deletes sync, issue and thread will be marked as deleted (Cant delete through the API).')
 	async deleteSync(interaction: CommandInteraction): Promise<void> {
 		try {
 			// @ts-ignore - Interaction name broken it exists but throws error

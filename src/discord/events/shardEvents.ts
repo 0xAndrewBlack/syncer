@@ -11,8 +11,8 @@ export class ShardHandler {
 		logger.info(`Shard #${shard} is up and ready.`);
 	}
 	@On({ event: 'shardError' })
-	async shardError([shard]: ArgsOf<'shardError'>): Promise<void> {
-		logger.error(`Shard #${shard} is encountered an error.`);
+	async shardError([shardError]: ArgsOf<'shardError'>): Promise<void> {
+		logger.error(`Shard Error encountered Error: [${shardError}].`);
 	}
 	@On({ event: 'shardDisconnect' })
 	async shardDisconnect([shard]: ArgsOf<'shardDisconnect'>): Promise<void> {

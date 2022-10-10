@@ -1,4 +1,4 @@
-import { DApplicationCommand, DIService } from 'discordx';
+import { DApplicationCommand } from 'discordx';
 import { MetadataStorage } from 'discordx';
 
 export function getAllDiscordClasses(): readonly DApplicationCommand[] {

@@ -14,9 +14,8 @@ import { IsThread } from '../guards/IsThread.Guard.js';
 @Discord()
 @Guard(IsThread)
 export class EditIssue {
-	@Slash({ name: 'issue' })
+	@Slash({ name: 'issue', description: 'Edits issue title and body via a modal.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Edits issue title and body via a modal.')
 	async showModal(interaction: CommandInteraction): Promise<void> {
 		const modal = new ModalBuilder().setTitle('Edit Issue').setCustomId('Edit Issue');
 

@@ -11,3 +11,8 @@ yarn.lock
 
 # Secrets
 *.pem
+deployment/scripts/*.sql
+
+# Logs
+logs
+*.log

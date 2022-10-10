@@ -1,17 +1,14 @@
-import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, GuildMember } from 'discord.js';
-import { Description, PermissionGuard } from '@discordx/utilities';
-import { Client, Discord, Guard, Guild, Slash, SlashOption } from 'discordx';
+import { ApplicationCommandOptionType, CommandInteraction, GuildMember } from 'discord.js';
+import { Client, Discord, Guard, Slash, SlashOption } from 'discordx';
 import { db } from '../../utils/helpers.js';
 import { IsDevGuard } from '../guards/IsDev.Guard.js';
 
 @Discord()
 @Guard(IsDevGuard)
 export class AddUser {
-	@Slash({ name: 'adduser' })
-	@Description(`Adds user to db. (Admins only)`)
+	@Slash({ name: 'adduser', description: `Adds user to db. (Admins only)` })
 	async addUser(
 		@SlashOption({
 			name: 'username',
@@ -20,9 +17,19 @@ export class AddUser {
 			required: true,
 		})
 		mentionedAssignee: GuildMember,
-		@SlashOption({ name: 'name', description: 'Custom name', required: true })
+		@SlashOption({
+			name: 'name',
+			type: ApplicationCommandOptionType.String,
+			description: 'Custom name',
+			required: true,
+		})
 		name: string,
-		@SlashOption({ name: 'github', description: 'GitHub username', required: true })
+		@SlashOption({
+			name: 'github',
+			type: ApplicationCommandOptionType.String,
+			description: 'GitHub username',
+			required: true,
+		})
 		github: string,
 		interaction: CommandInteraction,
 		client: Client

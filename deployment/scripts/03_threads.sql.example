@@ -1,0 +1,14 @@
+-- public.threads definition
+-- DROP TABLE IF EXISTS public.threads;
+CREATE TABLE IF NOT EXISTS public.threads (
+	id varchar(128) NOT NULL,
+	guild_id varchar(128) NOT NULL,
+	added date NOT NULL,
+	"status" public."_status" NULL,
+	ping bool NOT NULL,
+	CONSTRAINT threads_pkey PRIMARY KEY (id)
+);
+TABLESPACE pg_default;
+-- Permissions
+ALTER TABLE IF EXISTS public.threads OWNER TO syncer;
+GRANT ALL ON TABLE public.threads TO syncer;

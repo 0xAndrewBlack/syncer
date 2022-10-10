@@ -10,7 +10,7 @@ import { ActivityType } from 'discord.js';
 import { Client } from 'discordx';
 
 import { ErrorHandler } from './discord/guards/Error.Guard.js';
-import { botLogger } from './interfaces/loggerFactory.js';
+import { BotLogger } from './interfaces/loggerFactory.js';
 
 import { IssueServer } from './api/server.js';
 import { UptimeService } from './services/uptimeService.js';
@@ -27,7 +27,7 @@ export class DiscordBot {
 		this.api = new IssueServer();
 		this.bot = new Client({
 			shards: 'auto',
-			logger: new botLogger(),
+			logger: new BotLogger(),
 			silent: String(config.NODE_ENV) !== 'development',
 			botGuilds: [(client) => client.guilds.cache.map((guild) => guild.id)],
 			intents: [
@@ -45,19 +45,18 @@ export class DiscordBot {
 			guards: [ErrorHandler],
 		});
 
-		this.bot.once('ready', async () => {
-			await this.bot.guilds.fetch();
-			await this.bot.initApplicationCommands();
-			await this.bot.initGlobalApplicationCommands();
-
-			logger.info(`${this.bot.user?.username} logged in.`);
-		});
-
 		this.bot.on('ready', async () => {
-			this.bot.user?.setPresence({
-				activities: [{ name: 'over your guild.', type: ActivityType.Watching }],
+			logger.info(`[${this.bot.user?.username}] logged in.`);
+
+			await this.bot.guilds.fetch();
+
+			await this.bot.user?.setPresence({
+				activities: [{ name: 'your threads.', type: ActivityType.Watching }],
 				status: 'online',
 			});
+
+			await this.bot.initApplicationCommands();
+			await this.bot.initGlobalApplicationCommands();
 		});
 
 		this.bot.on('messageCreate', (message: Message) => {

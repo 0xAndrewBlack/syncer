@@ -3,22 +3,20 @@ import logger from '../../utils/logger.js';
 
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, GuildMember } from 'discord.js';
 import { Discord, Guard, Slash, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
-import { users } from '../../utils/users.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 import { db } from '../../utils/helpers.js';
 
 @Discord()
 @Guard(IsThread)
 export class AddAssignee {
-	@Slash({ name: 'assign' })
+	@Slash({ name: 'assign', description: 'Adds mentioned user to the issue.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Adds mentioned user to the issue.')
 	async addAssignee(
 		@SlashOption({
 			name: 'username',

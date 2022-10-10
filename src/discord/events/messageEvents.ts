@@ -12,9 +12,6 @@ import { DependaBotCleaner } from '../guards/Dependabot.Guard.js';
 export class MessageHandler {
 	@On({ event: 'messageCreate' })
 	async onMessageCreate([message]: ArgsOf<'messageDelete'>, client: Client): Promise<void> {
-		// logger.verbose('Message Sent', client.user?.username, message.content);
-		// logger.verbose(stripStatusFromThread(String(message.content)));
-
 		if (message.channelId === config.DB_CHANNEL) {
 			if (
 				message.embeds.length > 0 &&
