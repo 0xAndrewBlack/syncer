@@ -8,7 +8,7 @@ import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 import { UptimeService } from '../../services/uptimeService.js';
 
 @Discord()
@@ -96,9 +96,6 @@ export class ThreadHandler {
 
 		gh.init();
 
-		const { node_id } = await gh.isIssueExists(newChannelName);
-		const project = await gh.getProject(node_id);
-
 		if (!oldThread.locked && newThread.locked) {
 			logger.verbose(`THREAD > Archived & Locked [${newChannelName}].`);
 
@@ -112,16 +109,6 @@ export class ThreadHandler {
 
 			UptimeService.removeChannel(newThread);
 
-			// Persistent thread if not already Done
-			// if (project.fields.status != 'Done') {
-			// 	newThread.setArchived(false);
-			// 	newThread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
-			// 	logger.verbose('THREAD > Unarchived because issue is not Done yet.');
-			// }
-
-			// await gh.toggleIssue(oldChannelName);
-			// await gh.toggleLockIssue(oldChannelName);
-
 			return;
 		}
 
@@ -129,9 +116,6 @@ export class ThreadHandler {
 			logger.verbose(`THREAD > Unarchived [${newChannelName}].`);
 
 			UptimeService.addChannel(newThread);
-
-			// await gh.toggleIssue(newChannelName);
-			// await gh.toggleLockIssue(newChannelName);
 
 			return;
 		}
