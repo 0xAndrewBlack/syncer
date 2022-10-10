@@ -10,8 +10,8 @@ const prisma = new PrismaClient();
 
 // Store discord thread channels to later ping them in order to keep them persistent
 export abstract class UptimeService {
-	public static channels: Map<string, boolean> = new Map();
-	public static jobQueue: CronJob;
+	public static channelsToPing: Map<string, boolean> = new Map();
+	public static channelQueue: CronJob;
 
 	public static async init(): Promise<void> {
 		const fetchedChannels = await prisma.threads.findMany({
@@ -29,22 +29,22 @@ export abstract class UptimeService {
 			this.addChannel({ id, guild_id, status });
 		});
 
-		this.jobQueue = new CronJob(config.DC_PING_PATTERN, async () => {
-			logger.verbose(`PINGER > Pinging ${this.channels.size} channels...`);
+		this.channelQueue = new CronJob(config.DC_PING_PATTERN, async () => {
+			logger.verbose(`PINGER > Pinging ${this.channelsToPing.size} channels...`);
 
-			if (this.channels.size === 0) {
+			if (this.channelsToPing.size === 0) {
 				logger.info(`PINGER > No channels to ping!`);
 
 				return;
 			}
 
-			this.channels.forEach(async (value, key) => {
+			this.channelsToPing.forEach(async (value, key) => {
 				if (!value) return;
 
 				await this.pingChannel({ id: key });
 			});
 		});
-		this.jobQueue.start();
+		this.channelQueue.start();
 
 		logger.info(`PINGER > Initialized channels.`);
 	}
@@ -52,7 +52,7 @@ export abstract class UptimeService {
 	public static async addChannel(channel: any): Promise<void> {
 		logger.info(`PINGER > Adding a channel to the ping list...`);
 
-		const channels = await prisma.threads.upsert({
+		const fetchedChannels = await prisma.threads.upsert({
 			create: {
 				id: channel.id,
 				guild_id: channel.guild_id ? channel.guild_id : channel.guildId,
@@ -72,13 +72,13 @@ export abstract class UptimeService {
 			},
 		});
 
-		const { id, status, ping } = channels;
+		const { id, status, ping } = fetchedChannels;
 
-		this.channels.set(id, ping);
+		this.channelsToPing.set(id, ping);
 	}
 
 	public static async removeChannel(channel: any): Promise<void> {
-		const ch = await prisma.threads.findUnique({
+		const fetchedChannel = await prisma.threads.findUnique({
 			where: {
 				id: channel.id,
 			},
@@ -90,10 +90,10 @@ export abstract class UptimeService {
 			},
 		});
 
-		if (!ch) return;
+		if (!fetchedChannel) return;
 
-		if (!this.channels.has(ch.id)) {
-			logger.info(`PINGER > Channel [${ch.id}] is not in the ping list!`);
+		if (!this.channelsToPing.has(fetchedChannel.id)) {
+			logger.info(`PINGER > Channel [${fetchedChannel.id}] is not in the ping list!`);
 
 			return;
 		}
@@ -104,17 +104,17 @@ export abstract class UptimeService {
 			},
 		});
 
-		this.channels.delete(channel.id);
+		this.channelsToPing.delete(channel.id);
 
 		logger.info(`PINGER > Removed a channel from the ping list...`);
 	}
 
 	public static async pingChannel(channel: any): Promise<void> {
-		const ch = await DiscordBot.bot.channels.fetch(channel.id);
+		const channelToPing = await DiscordBot.bot.channels.fetch(channel.id);
 
-		if (!ch) return;
+		if (!channelToPing) return;
 
-		if (!ch.isThread()) {
+		if (!channelToPing.isThread()) {
 			logger.error('PINGER > Channel is not a thread!');
 
 			UptimeService.removeChannel(channel);
@@ -128,20 +128,24 @@ export abstract class UptimeService {
 			return;
 		}
 
-		ch.setArchived(false);
-		ch.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+		try {
+			channelToPing.setArchived(false);
+			channelToPing.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+		} catch (e: any) {
+			logger.error(`PINGER > Error while pinging channel [${channel.id}]: ${e.message}`);
+		}
 	}
 
 	public static async statusIsDone(ch: any): Promise<boolean> {
-		const channel = await prisma.threads.findUnique({
+		const fetchedChannel = await prisma.threads.findUnique({
 			where: {
 				id: ch.id,
 			},
 		});
 
-		if (!channel) return false;
+		if (!fetchedChannel) return false;
 
-		return channel.status.includes('open');
+		return fetchedChannel.status.includes('open');
 	}
 }
 
