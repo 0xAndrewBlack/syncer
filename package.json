@@ -33,7 +33,7 @@
 		"discord.js": "^14.2.0",
 		"discordx": "^11.1.8",
 		"dotenv": "^16.0.1",
-		"express": "^4.18.1",
+		"express": "^4.18.2",
 		"gitcord": "^1.0.3",
 		"github-project": "^2.2.0",
 		"helmet": "^6.0.0",
