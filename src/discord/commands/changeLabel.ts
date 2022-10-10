@@ -1,24 +1,28 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread)
 export class UpdateLabel {
-	@Slash({ name: 'label' })
+	@Slash({ name: 'label', description: 'Appends label(s).' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Appends label(s), delimit by comma dont add spaces between.')
 	async changePriority(
-		@SlashOption({ name: 'label', description: 'Issue label', required: true })
+		@SlashOption({
+			name: 'label',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue label',
+			required: true,
+		})
 		label: string,
 		interaction: CommandInteraction
 	): Promise<void> {
@@ -33,7 +37,7 @@ export class UpdateLabel {
 			await gh.init();
 
 			// @ts-ignore
-			await gh.editIssueLabel(channelName, [...label.split(',')], true);
+			await gh.editIssueLabel(channelName, [...label.replaceAll(' ', '').split(',')], true);
 			logger.verbose(
 				// @ts-ignore
 				`SYNCER > Label [${label}], appended to [${channelName}] issue.`

@@ -1,9 +1,9 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { Status, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -14,12 +14,16 @@ import { UptimeService } from '../../services/uptimeService.js';
 @Discord()
 @Guard(IsThread)
 export class ChangeStatus {
-	@Slash({ name: 'status' })
+	@Slash({ name: 'status', description: 'Sets status, on Done the thread will close.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Sets status, on Done the thread will close.')
 	async changePriority(
 		@SlashChoice(...Status)
-		@SlashOption({ name: 'status', description: 'Issue status', required: true })
+		@SlashOption({
+			name: 'status',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue status',
+			required: true,
+		})
 		status: string,
 		interaction: CommandInteraction
 	): Promise<void> {

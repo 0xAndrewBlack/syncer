@@ -2,7 +2,7 @@ import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 import { Client, Discord, Guard, Slash } from 'discordx';
 
 import { gh } from '../../services/githubService.js';
@@ -13,9 +13,8 @@ import { IsIssue } from '../guards/IsIssue.Guard.js';
 @Discord()
 @Guard(IsThread, IsIssue)
 export class IssueStatus {
-	@Slash({ name: 'info' })
+	@Slash({ name: 'info', description: 'Get information about an issue.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description(`Gets info about the current thrread's GitHub issue.`)
 	async info(interaction: CommandInteraction, client: Client, guardData: { issue: any; project: any }): Promise<void> {
 		await gh.init();
 

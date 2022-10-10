@@ -1,9 +1,9 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { Stories, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -14,12 +14,16 @@ import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
 @Discord()
 @Guard(IsThread)
 export class EditStory {
-	@Slash({ name: 'story' })
+	@Slash({ name: 'story', description: 'Changes story' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Changes story.')
 	async editStory(
 		@SlashChoice(...Stories)
-		@SlashOption({ name: 'story', description: 'Issue related to a story', required: true })
+		@SlashOption({
+			name: 'story',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue related to a story',
+			required: true,
+		})
 		story: string,
 		interaction: CommandInteraction
 	): Promise<void> {

@@ -3,7 +3,7 @@ import logger from '../../utils/logger.js';
 
 import { ApplicationCommandOptionType, CommandInteraction, EmbedBuilder, GuildMember } from 'discord.js';
 import { Discord, Guard, Slash, SlashChoice, SlashOption } from 'discordx';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 
 import { Priorities, Status, Stories, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -15,9 +15,8 @@ import { APIError, GitHubError, UserError } from '../../interfaces/errorFactory.
 @Discord()
 @Guard(IsThread)
 export class IssueSettings {
-	@Slash({ name: 'set' })
+	@Slash({ name: 'set', description: 'Set multiple paramteres for an issue.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Set multiple params to an issue, assign, label and set a status for an issue.')
 	async setIssue(
 		@SlashOption({
 			name: 'username',
@@ -27,15 +26,35 @@ export class IssueSettings {
 		})
 		mentionedAssignee: GuildMember,
 		@SlashChoice(...Status)
-		@SlashOption({ name: 'status', description: 'Issue status', required: false })
+		@SlashOption({
+			name: 'status',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue status',
+			required: false,
+		})
 		status: string,
 		@SlashChoice(...Priorities)
-		@SlashOption({ name: 'priority', description: 'Issue priority', required: false })
+		@SlashOption({
+			name: 'priority',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue priority',
+			required: false,
+		})
 		prio: string,
-		@SlashOption({ name: 'label', description: 'Issue label', required: false })
+		@SlashOption({
+			name: 'label',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue label',
+			required: false,
+		})
 		label: string,
 		@SlashChoice(...Stories)
-		@SlashOption({ name: 'story', description: 'Issue related to a story', required: false })
+		@SlashOption({
+			name: 'story',
+			type: ApplicationCommandOptionType.String,
+			description: 'Issue related to a story',
+			required: false,
+		})
 		story: string,
 		interaction: CommandInteraction
 	): Promise<void> {

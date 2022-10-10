@@ -1,23 +1,24 @@
 import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
-import { CommandInteraction, EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { CommandInteraction, EmbedBuilder } from 'discord.js';
+import { PermissionGuard } from '@discordx/utilities';
 import { Discord, Guard, Slash } from 'discordx';
 
-import { labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
+import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
 
 import { IsThread } from '../guards/IsThread.Guard.js';
-import { IsIssueLinked } from '../guards/IsIssueLinked.Guard.js';
-import { APIError, GitHubError } from '../../interfaces/errorFactory.js';
+import { APIError } from '../../interfaces/errorFactory.js';
 
 @Discord()
 @Guard(IsThread)
 export class UpdateSync {
-	@Slash({ name: 'updatesync' })
+	@Slash({
+		name: 'updatesync',
+		description: 'Update sync and issue body to the first message and adds links if not exist.',
+	})
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description('Updates sync and issue body to the first message and adds links if not exist.')
 	async updateSync(interaction: CommandInteraction): Promise<void> {
 		// @ts-ignore
 		const { name } = interaction.channel;

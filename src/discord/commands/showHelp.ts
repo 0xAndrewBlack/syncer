@@ -2,16 +2,15 @@ import { config } from '../../config.js';
 import logger from '../../utils/logger.js';
 
 import { CommandInteraction, EmbedBuilder } from 'discord.js';
-import { Description, PermissionGuard } from '@discordx/utilities';
+import { PermissionGuard } from '@discordx/utilities';
 import { Client, Discord, Guard, Slash } from 'discordx';
 
 import { getAllDiscordClasses } from '../services/getCommands.js';
 
 @Discord()
 export class ShowHelp {
-	@Slash({ name: 'help' })
+	@Slash({ name: 'help', description: 'Show a small documentation about the available commands.' })
 	@Guard(PermissionGuard(['SendMessages']))
-	@Description(`Show a small documentation about the available commands.`)
 	async info(interaction: CommandInteraction, client: Client): Promise<void> {
 		const allCommands = getAllDiscordClasses();
 		const commands: any = allCommands
