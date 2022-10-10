@@ -115,7 +115,7 @@ export class ThreadHandler {
 		if (oldThread.archived && !newThread.archived) {
 			logger.verbose(`THREAD > Unarchived [${newChannelName}].`);
 
-			UptimeService.addChannel(newThread);
+			// UptimeService.addChannel(newThread);
 
 			return;
 		}

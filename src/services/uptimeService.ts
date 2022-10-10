@@ -98,9 +98,13 @@ export abstract class UptimeService {
 			return;
 		}
 
-		await prisma.threads.delete({
+		await prisma.threads.update({
+			data: {
+				ping: false,
+				status: 'closed',
+			},
 			where: {
-				id: channel.id,
+				id: fetchedChannel.id,
 			},
 		});
 
