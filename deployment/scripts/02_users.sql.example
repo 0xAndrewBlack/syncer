@@ -1,0 +1,13 @@
+-- public.users definition
+-- DROP TABLE IF EXISTS public.users;
+CREATE TABLE IF NOT EXISTS public.users (
+	user_id varchar(128) NOT NULL,
+	user_name varchar(64) NULL,
+	discord_handle varchar(64) NULL,
+	github_handle varchar(64) NULL,
+	CONSTRAINT users_pkey PRIMARY KEY (user_id)
+);
+TABLESPACE pg_default;
+-- Permissions
+ALTER TABLE IF EXISTS public.users OWNER TO syncer;
+GRANT ALL ON TABLE public.users TO syncer;

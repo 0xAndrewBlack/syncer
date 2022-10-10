@@ -1,0 +1,18 @@
+-- public.guilds definition
+-- DROP TABLE IF EXISTS public.guilds;
+CREATE TABLE IF NOT EXISTS public.guilds (
+	id varchar(128) NOT NULL,
+	wel_channel_id varchar(128) NOT NULL,
+	imp_channel_id varchar(128) NOT NULL,
+	bug_channel_id varchar(128) NOT NULL,
+	gh_token varchar(128) NOT NULL,
+	gh_owner varchar(128) NOT NULL,
+	gh_repo varchar(128) NOT NULL,
+	gh_project_number int4 NOT NULL,
+	iv_vector varchar(128) NOT NULL,
+	CONSTRAINT guilds_pkey PRIMARY KEY (id)
+);
+TABLESPACE pg_default;
+-- Permissions
+ALTER TABLE IF EXISTS public.guilds OWNER TO syncer;
+GRANT ALL ON TABLE public.guilds TO syncer;
