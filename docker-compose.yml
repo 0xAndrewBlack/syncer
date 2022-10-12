@@ -8,21 +8,8 @@ services:
     build: .
     depends_on:
       - database
-    environment:
-      - DC_BOT_TOKEN=${DC_BOT_TOKEN}
-      - GUILD_ID=${GUILD_ID}
-      - DB_ID=${DB_ID}
-      - DB_CHANNEL=${DB_CHANNEL}
-      - BUG_CHANNEL=${BUG_CHANNEL}
-      - IMP_CHANNEL=${IMP_CHANNEL}
-      - GH_TOKEN=${GH_TOKEN}
-      - GH_ORG=${GH_ORG}
-      - GH_REPO=${GH_REPO}
-      - GH_PROJECT_NUMBER=${GH_PROJECT_NUMBER}
-      - DB_URL=${DB_URL}
-      - DC_DEV_ID=${DC_DEV_ID}
-      - DC_DEV_SERVER=${DC_DEV_SERVER}
-      - DC_PING_PATTERN=${DC_PING_PATTERN}
+    env_file:
+      - .env
     restart: on-failure
     networks:
       botnet:
