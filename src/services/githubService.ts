@@ -26,7 +26,7 @@ export class GitHubService {
 		this.location = `${this.repo}/${this.repo}`;
 		this.projectId = config.GH_PROJECT_NUMBER;
 		this.project = new GitHubProject({
-			org: config.GH_ORG,
+			owner: config.GH_ORG,
 			number: config.GH_PROJECT_NUMBER,
 			token: config.GH_TOKEN,
 			fields: {
@@ -50,7 +50,7 @@ export class GitHubService {
 		this.location = `${this.repo}/${this.repo}`;
 		this.projectId = config.GH_PROJECT_NUMBER;
 		this.project = new GitHubProject({
-			org: config.GH_ORG,
+			owner: config.GH_ORG,
 			number: config.GH_PROJECT_NUMBER,
 			token: config.GH_TOKEN,
 			fields: {
@@ -384,12 +384,6 @@ export class GitHubService {
 		project.items.update(card.id, {
 			title: newTitle,
 		});
-	}
-
-	async getCards() {
-		const { project } = this;
-
-		return await project.items.list();
 	}
 
 	getData() {

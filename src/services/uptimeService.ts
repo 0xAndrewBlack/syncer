@@ -114,7 +114,13 @@ export abstract class UptimeService {
 	}
 
 	public static async pingChannel(channel: any): Promise<void> {
-		const channelToPing = await DiscordBot.bot.channels.fetch(channel.id);
+		const channelToPing = await DiscordBot.bot.channels.fetch(channel.id).catch((error) => {
+			logger.error(`PINGER > [${error}] - Channel possibly deleted?`);
+
+			this.removeChannel(channel);
+
+			return;
+		});
 
 		if (!channelToPing) return;
 

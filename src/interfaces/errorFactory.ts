@@ -5,7 +5,7 @@ export class EnvironmentError extends Error {
 		this.name = 'Environment Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
@@ -18,7 +18,7 @@ export class DevelopmentError extends Error {
 		this.name = 'Development Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
@@ -31,7 +31,7 @@ export class UserError extends Error {
 		this.name = 'User Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
@@ -44,7 +44,7 @@ export class DiscordError extends Error {
 		this.name = 'Discord Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
@@ -57,7 +57,7 @@ export class GitHubError extends Error {
 		this.name = 'GitHub Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
@@ -70,7 +70,7 @@ export class APIError extends Error {
 		this.name = 'API Error';
 		this.message = message;
 		this.cause = Error(message);
-		this.stack = this.cause.stack;
+		this.stack = this.stack;
 
 		Error.captureStackTrace(this, this.constructor);
 	}
