@@ -46,7 +46,7 @@ export class DiscordBot {
 		});
 
 		this.bot.on('ready', async () => {
-			logger.info(`[${this.bot.user?.username}] logged in.`);
+			logger.info(`RUNNER > [${this.bot.user?.username}] logged in.`);
 
 			await this.bot.guilds.fetch();
 
