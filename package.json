@@ -23,6 +23,7 @@
 		"@overnightjs/core": "^1.7.6",
 		"@prisma/client": "^4.4.0",
 		"body-parser": "^1.20.1",
+		"bottleneck": "^2.19.5",
 		"compression": "^1.7.4",
 		"cookie-parser": "^1.4.6",
 		"cookieparser": "^0.1.0",
