@@ -5,6 +5,7 @@ import { ThreadAutoArchiveDuration } from 'discord.js';
 import { CronJob } from 'cron';
 import { PrismaClient } from '@prisma/client';
 import { DiscordBot } from '../index.js';
+import pingLimiter from '../utils/limiters.js';
 
 const prisma = new PrismaClient();
 
@@ -50,7 +51,7 @@ export abstract class UptimeService {
 	}
 
 	public static async addChannel(channel: any): Promise<void> {
-		logger.info(`PINGER > Adding a channel to the ping list...`);
+		// logger.info(`PINGER > Adding a channel to the ping list...`);
 
 		const fetchedChannels = await prisma.threads.upsert({
 			create: {
@@ -114,13 +115,21 @@ export abstract class UptimeService {
 	}
 
 	public static async pingChannel(channel: any): Promise<void> {
-		const channelToPing = await DiscordBot.bot.channels.fetch(channel.id).catch((error) => {
-			logger.error(`PINGER > [${error}] - Channel possibly deleted?`);
+		const channelToPing = await DiscordBot.bot.channels
+			.fetch(channel.id)
+			.then((d) => {
+				if (config.NODE_ENV !== 'production') {
+					// @ts-ignore
+					logger.debug(`PINGER > Pinging channel [${d?.name}]...`);
+				}
 
-			this.removeChannel(channel);
+				return d;
+			})
+			.catch((error) => {
+				logger.error(`PINGER > [${error}] - Channel possibly deleted?`);
 
-			return;
-		});
+				// this.removeChannel(channel);
+			});
 
 		if (!channelToPing) return;
 
@@ -139,17 +148,19 @@ export abstract class UptimeService {
 		}
 
 		try {
-			channelToPing.setArchived(false);
-			channelToPing.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+			pingLimiter.schedule(async () => {
+				await channelToPing.setArchived(false);
+				await channelToPing.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+			});
 		} catch (e: any) {
 			logger.error(`PINGER > Error while pinging channel [${channel.id}]: ${e.message}`);
 		}
 	}
 
-	public static async statusIsDone(ch: any): Promise<boolean> {
+	public static async statusIsDone(channel: any): Promise<boolean> {
 		const fetchedChannel = await prisma.threads.findUnique({
 			where: {
-				id: ch.id,
+				id: channel.id,
 			},
 		});
 
