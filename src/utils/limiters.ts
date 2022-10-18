@@ -10,10 +10,24 @@ const pingLimiter = new Bottleneck({
 	reservoirRefreshInterval: 10 * 1000,
 });
 
+const channelNameLimiter = new Bottleneck({
+	reservoir: 2,
+	minTime: 30 * 1000,
+	maxConcurrent: 2,
+	reservoirRefreshAmount: 1,
+	reservoirRefreshInterval: 10 * 1000,
+});
+
 pingLimiter.on('depleted', () => {
 	const queued = pingLimiter.queued();
 
 	logger.warn(`PINGER > pingLimiter depleted, queued requests: [${JSON.stringify(queued)}]`);
+});
+
+channelNameLimiter.on('depleted', () => {
+	const queued = channelNameLimiter.queued();
+
+	logger.warn(`SYNCER > channelNameLimiter depleted, queued requests: [${JSON.stringify(queued)}]`);
 });
 
 if (config.NODE_ENV !== 'production') {
@@ -32,10 +46,33 @@ if (config.NODE_ENV !== 'production') {
 	pingLimiter.on('done', (info) => {
 		logger.info(`PINGER > pingLimiter done: [${JSON.stringify(info)}]`);
 	});
+
+	channelNameLimiter.on('received', (tokens) => {
+		logger.debug(`SYNCER > channelNameLimiter received [${JSON.stringify(tokens)}] tokens`);
+	});
+
+	channelNameLimiter.on('queued', (ms) => {
+		logger.debug(`SYNCER > channelNameLimiter queued, waiting [${JSON.stringify(ms)}]ms`);
+	});
+
+	channelNameLimiter.on('message', (message) => {
+		logger.debug(`SYNCER > channelNameLimiter message: [${JSON.stringify(message)}]`);
+	});
+
+	channelNameLimiter.on('done', (info) => {
+		logger.info(`SYNCER > channelNameLimiter done: [${JSON.stringify(info)}]`);
+	});
 }
 
 pingLimiter.on('idle', () => {
 	logger.verbose(`PINGER > pingLimiter idle, queue emptied jobs done.`);
 });
 
-export default pingLimiter;
+channelNameLimiter.on('idle', () => {
+	logger.verbose(`SYNCER > channelNameLimiter idle, queue emptied jobs done.`);
+});
+
+export default {
+	pingLimiter,
+	channelNameLimiter,
+};

@@ -7,7 +7,7 @@ import { PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-
+import limiters from '../../utils/limiters.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { APIError } from '../../interfaces/errorFactory.js';
 import { UptimeService } from '../../services/uptimeService.js';
@@ -44,13 +44,15 @@ export class DeleteSync {
 				embeds: [labelEmbed],
 			});
 			UptimeService.removeChannel(interaction.channel);
-			// @ts-ignore
-			interaction.channel.setLocked(true);
-			// @ts-ignore
-			interaction.channel.setArchived(true);
-			// .then((data) => {
-			// 	data.interaction.channel?.delete();
-			// });
+			limiters.channelNameLimiter.schedule(async () => {
+				// @ts-ignore
+				interaction.channel.setLocked(true);
+				// @ts-ignore
+				interaction.channel.setArchived(true);
+				// .then((data) => {
+				// 	data.interaction.channel?.delete();
+				// });
+			});
 		} catch (error: Error | any) {
 			throw new APIError(error.message);
 		}

@@ -8,7 +8,7 @@ import { Description, PermissionGuard } from '@discordx/utilities';
 
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-
+import limiters from '../../utils/limiters.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 
 @Discord()
@@ -61,8 +61,10 @@ export class EditIssue {
 			ephemeral: true,
 		});
 
-		// @ts-ignore
-		interaction.channel.setName(`${status} - ${issueTitle}`);
+		limiters.channelNameLimiter.schedule(async () => {
+			// @ts-ignore
+			interaction.channel.setName(`${status} - ${issueTitle}`);
+		});
 
 		return;
 	}

@@ -7,7 +7,7 @@ import { PermissionGuard } from '@discordx/utilities';
 
 import { Priorities, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-
+import limiters from '../../utils/limiters.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { APIError } from '../../interfaces/errorFactory.js';
 
@@ -44,8 +44,10 @@ export class ChangePriority {
 			logger.verbose(`SYNCER > Priority [${prio}], changed on [${channelName}] issue.`);
 
 			if (prio == 'Critical') {
-				// @ts-ignore
-				interaction.channel.setName(`🚩 - ${channelName}`);
+				limiters.channelNameLimiter.schedule(async () => {
+					// @ts-ignore
+					interaction.channel.setName(`🚩 - ${channelName}`);
+				});
 			}
 
 			await interaction.reply({
