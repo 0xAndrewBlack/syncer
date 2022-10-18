@@ -4,7 +4,7 @@ import logger from '../../utils/logger.js';
 import type { ArgsOf, Client } from 'discordx';
 import { Discord, On } from 'discordx';
 import { EmbedBuilder, ThreadAutoArchiveDuration } from 'discord.js';
-
+import limiters from '../../utils/limiters.js';
 import { stripStatusFromThread } from '../../utils/discord.js';
 import { labelsWithEmojis } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
@@ -16,8 +16,6 @@ export class ThreadHandler {
 	@On({ event: 'threadCreate' })
 	async onThreadCreate([thread]: ArgsOf<'threadCreate'>, client: Client): Promise<void> {
 		const { name } = thread;
-
-		thread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 
 		const starterMessage = await thread.messages.fetch({ cache: false, limit: 1 });
 
@@ -53,7 +51,10 @@ export class ThreadHandler {
 
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
-			await thread.setName(`${status} - ${name}`);
+			limiters.channelNameLimiter.schedule(async () => {
+				await thread.setName(`${status} - ${name}`);
+				await thread.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
+			});
 
 			issueObj.id = data.number;
 			issueObj.status = data.labels[0];

@@ -7,7 +7,7 @@ import { PermissionGuard } from '@discordx/utilities';
 
 import { Status, labelsWithEmojis, stripStatusFromThread } from '../../utils/discord.js';
 import { gh } from '../../services/githubService.js';
-
+import limiters from '../../utils/limiters.js';
 import { IsThread } from '../guards/IsThread.Guard.js';
 import { UptimeService } from '../../services/uptimeService.js';
 
@@ -49,11 +49,13 @@ export class ChangeStatus {
 		const statusEmoji = labelsWithEmojis.find((labels) => labels.label === status)?.emoji;
 
 		if (status === 'Done') {
-			// @ts-ignore
-			await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+			limiters.channelNameLimiter.schedule(async () => {
+				// @ts-ignore
+				await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+				// @ts-ignore
+				await interaction.channel?.setArchived(true);
+			});
 			UptimeService.removeChannel(interaction.channel);
-			// @ts-ignore
-			await interaction.channel?.setArchived(true);
 
 			return;
 		}
@@ -63,8 +65,10 @@ export class ChangeStatus {
 			return;
 		}
 
-		// @ts-ignore
-		await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+		limiters.channelNameLimiter.schedule(async () => {
+			// @ts-ignore
+			await interaction.channel.setName(`${statusEmoji} - ${issueName}`);
+		});
 
 		return;
 	}
