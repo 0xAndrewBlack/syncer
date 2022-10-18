@@ -5,7 +5,8 @@ import { ThreadAutoArchiveDuration } from 'discord.js';
 import { CronJob } from 'cron';
 import { PrismaClient } from '@prisma/client';
 import { DiscordBot } from '../index.js';
-import pingLimiter from '../utils/limiters.js';
+
+import limiters from '../utils/limiters.js';
 
 const prisma = new PrismaClient();
 
@@ -148,7 +149,7 @@ export abstract class UptimeService {
 		}
 
 		try {
-			pingLimiter.schedule(async () => {
+			limiters.pingLimiter.schedule(async () => {
 				await channelToPing.setArchived(false);
 				await channelToPing.setAutoArchiveDuration(ThreadAutoArchiveDuration.OneWeek);
 			});
