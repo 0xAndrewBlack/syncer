@@ -15,7 +15,7 @@ import { IndexController } from './routes/index.js';
 import { StatusController } from './routes/status.js';
 import { IssueController } from './routes/api.js';
 
-import { corsOptions, morganProdOptions } from '../utils/helpers.js';
+import { corsOptions, morganProdOptions, morganJSONFormat } from './helpers/helpers.js';
 import { ErrorHandler } from './middlewares/Error.Middleware.js';
 import { dirname, resolve } from '@discordx/importer';
 import { container } from 'tsyringe';
@@ -40,7 +40,7 @@ export class IssueServer extends Server {
 		this.app.set('json spaces', 2);
 
 		this.app.use(cors(corsOptions));
-		this.app.use(morgan(config.NODE_ENV === 'development' ? 'dev' : morganProdOptions));
+		this.app.use(morgan(morganJSONFormat()));
 		this.app.use(helmet({ contentSecurityPolicy: false }));
 		this.app.use(cookieParser());
 		this.app.use(express.json({ limit: '5mb' }));
