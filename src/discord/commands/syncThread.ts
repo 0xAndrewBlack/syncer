@@ -37,12 +37,16 @@ export class SyncThread {
 			gh.init();
 
 			if (interaction.channel?.isThread()) {
-				if (interaction.channel.parentId == config.BUG_CHANNEL) {
+				if (interaction.channel.parentId == config.CHANNELS.BUG_CHANNEL) {
 					label = 'bug';
 				}
 
-				if (interaction.channel.parentId == config.IMP_CHANNEL) {
+				if (interaction.channel.parentId == config.CHANNELS.IMP_CHANNEL) {
 					label = 'improvement';
+				}
+
+				if (interaction.channel.parentId == config.CHANNELS.INT_CHANNEL) {
+					label = 'integration, infra';
 				}
 			}
 
@@ -57,13 +61,15 @@ export class SyncThread {
 
 			const issueBody = starterMessage?.content;
 			const body = `👤 Issue created by ${interaction.user.username}#${interaction.user.discriminator} - Check this [thread on discord](${interaction.channel?.url}) for the whole conversation.\n\n---\n\n${issueBody}`;
-			const { data } = await gh.createIssue(isUrgent ? channelName : name, body, [label]);
+			const { data } = await gh.createIssue(isUrgent ? channelName : name, body, [
+				...label.replaceAll(' ', '').split(','),
+			]);
 
 			// @ts-ignore
 			interaction.channel.setName(`${status} - ${isUrgent ? channelName : name}`);
 
 			issueObj.id = data.number;
-			issueObj.status = data.labels[0];
+			issueObj.status = data.labels;
 			issueObj.issueLink = data.html_url;
 
 			await UptimeService.addChannel(interaction.channel);
@@ -75,16 +81,15 @@ export class SyncThread {
 			.setColor(config.DC_COLORS.EMBED)
 			.setTitle(isUrgent ? channelName : name)
 			.setURL(issueObj.issueLink)
-			.setDescription('Issue created.')
 			.addFields(
 				{
 					name: `ID`,
-					value: `${issueObj.id}`,
+					value: `\`${issueObj.id}\``,
 					inline: true,
 				},
 				{
 					name: `Status`,
-					value: `${issueObj.status.name}`,
+					value: `\`${issueObj.status.map((label: any) => label.name)}\``,
 					inline: true,
 				}
 			)
