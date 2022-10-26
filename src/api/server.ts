@@ -40,7 +40,7 @@ export class IssueServer extends Server {
 		this.app.set('json spaces', 2);
 
 		this.app.use(cors(corsOptions));
-		this.app.use(morgan(morganJSONFormat()));
+		this.app.use(morgan(config.NODE_ENV !== 'production' ? 'dev' : morganProdOptions));
 		this.app.use(helmet({ contentSecurityPolicy: false }));
 		this.app.use(cookieParser());
 		this.app.use(express.json({ limit: '5mb' }));
