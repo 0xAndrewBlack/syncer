@@ -22,7 +22,7 @@ export function authHandler(req: Request, res: Response, next: NextFunction) {
 
 	const ip = req.socket.remoteAddress;
 	if (!ALLOWED_IPS.includes(String(ip))) {
-		logger.warn(`Unauthorized access from [${ip}]`);
+		logger.warn(`API > Unauthorized access from [${ip}]`);
 
 		return res.status(StatusCodes.FORBIDDEN).json({ error: ['Requests are not allowed from this IP address!'] });
 	}

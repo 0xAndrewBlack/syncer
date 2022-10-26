@@ -17,8 +17,7 @@ import { IssueController } from './routes/api.js';
 
 import { corsOptions, morganProdOptions, morganJSONFormat } from './helpers/helpers.js';
 import { ErrorHandler } from './middlewares/Error.Middleware.js';
-import { dirname, resolve } from '@discordx/importer';
-import { container } from 'tsyringe';
+import { dirname } from '@discordx/importer';
 
 export class IssueServer extends Server {
 	public portNumber: Number;
@@ -66,7 +65,7 @@ export class IssueServer extends Server {
 
 	private async start(): Promise<void> {
 		this.app.listen(this.portNumber, () => {
-			logger.info(`API running on http://localhost:${this.portNumber}`);
+			logger.info(`API > Listening on http://localhost:${this.portNumber}`);
 		});
 	}
 }
