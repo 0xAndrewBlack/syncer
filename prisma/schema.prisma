@@ -12,6 +12,7 @@ model guilds {
   wel_channel_id    String @db.VarChar(128)
   imp_channel_id    String @db.VarChar(128)
   bug_channel_id    String @db.VarChar(128)
+  int_channel_id    String @db.VarChar(128)
   gh_token          String @db.VarChar(128)
   gh_owner          String @db.VarChar(128)
   gh_repo           String @db.VarChar(128)
