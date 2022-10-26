@@ -8,6 +8,11 @@ import { StatusCodes } from 'http-status-codes';
 import { ALLOWED_IPS } from '../helpers/helpers.js';
 
 export function authHandler(req: Request, res: Response, next: NextFunction) {
+	const ipa = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+	logger.info(
+		`${ipa} ${req.socket.remoteAddress} - ${req.headers['x-forwarded-for']} - ${req.method} - ${req.originalUrl} - ${res.statusCode} - ${res.statusMessage}`
+	);
+
 	if (config.NODE_ENV === 'development') {
 		return next();
 	}
