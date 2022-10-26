@@ -8,7 +8,7 @@ name: ✨ Branch based Docker image building and publishing
 on:
   push:
     branches:
-      - "master"
+      - '*'
 
 env:
   DIVE_VERSION: v0.10
@@ -17,7 +17,7 @@ jobs:
   build:
     name: 🔨 Build and Publish the container image
     runs-on: ubuntu-latest
-    environment: "Deployment"
+    environment: 'Deployment'
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
       - name: ⬇️ Checkout repo
@@ -31,7 +31,7 @@ jobs:
       - name: ⬇️ Install Cosign
         uses: sigstore/cosign-installer@v2.3.0
         with:
-          cosign-release: "v1.8.0"
+          cosign-release: 'v1.8.0'
 
       - name: ⬇️ Install Syft
         run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
@@ -116,17 +116,16 @@ jobs:
     needs: build
     if: github.event_name == 'push' || github.event.pull_request.merged == true
     steps:
-
       - name: ⬇️ Setup Cosign Public Key
         run: echo "$KEY" > cosign.pub
         shell: bash
         env:
           KEY: ${{ secrets.COSIGN_PUBLIC_KEY }}
-      
+
       - name: ⬇️ Install Cosign
         uses: sigstore/cosign-installer@v2.3.0
         with:
-          cosign-release: "v1.8.0"
+          cosign-release: 'v1.8.0'
 
       - name: ⬇️ Install Grype
         run: |
@@ -147,5 +146,3 @@ jobs:
         with:
           name: GRYPE_REPORT
           path: grype_report.txt
-
-
