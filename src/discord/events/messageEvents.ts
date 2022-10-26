@@ -12,7 +12,7 @@ import { DependaBotCleaner } from '../guards/Dependabot.Guard.js';
 export class MessageHandler {
 	@On({ event: 'messageCreate' })
 	async onMessageCreate([message]: ArgsOf<'messageDelete'>, client: Client): Promise<void> {
-		if (message.channelId === config.DB_CHANNEL) {
+		if (message.channelId === config.CHANNELS.DB_CHANNEL) {
 			if (
 				message.embeds.length > 0 &&
 				message.author?.id == config.DB_ID &&

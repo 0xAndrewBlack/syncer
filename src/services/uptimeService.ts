@@ -16,16 +16,17 @@ export abstract class UptimeService {
 	public static channelQueue: CronJob;
 
 	public static async init(): Promise<void> {
-		const fetchedChannels = await prisma.threads.findMany({
-			where: {
-				ping: true,
-			},
-			select: {
-				id: true,
-				guild_id: true,
-				status: true,
-			},
-		});
+		const fetchedChannels =
+			(await prisma.threads.findMany({
+				where: {
+					ping: true,
+				},
+				select: {
+					id: true,
+					guild_id: true,
+					status: true,
+				},
+			})) || [];
 
 		fetchedChannels.forEach(({ id, guild_id, status }) => {
 			this.addChannel({ id, guild_id, status });

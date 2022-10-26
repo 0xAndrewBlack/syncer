@@ -23,7 +23,7 @@ export class ThreadHandler {
 		let issueEmbed: any;
 		let issueObj: any = {};
 
-		const validChannels = [config.BUG_CHANNEL, config.IMP_CHANNEL];
+		const validChannels = [config.CHANNELS.BUG_CHANNEL, config.CHANNELS.IMP_CHANNEL, config.CHANNELS.INT_CHANNEL];
 		const isValidChannel = validChannels?.includes(thread.parentId as any);
 
 		if (!isValidChannel) {
@@ -37,17 +37,21 @@ export class ThreadHandler {
 		try {
 			gh.init();
 
-			if (thread.parentId == config.BUG_CHANNEL) {
+			if (thread.parentId == config.CHANNELS.BUG_CHANNEL) {
 				label = 'bug';
 			}
 
-			if (thread.parentId == config.IMP_CHANNEL) {
+			if (thread.parentId == config.CHANNELS.IMP_CHANNEL) {
 				label = 'improvement';
+			}
+
+			if (thread.parentId == config.CHANNELS.INT_CHANNEL) {
+				label = 'integration, infra';
 			}
 
 			const msg: any = (await starterMessage.first()) || (await thread.fetchStarterMessage());
 			const body = `👤 Issue created by ${msg.author.username}#${msg.author.discriminator} - Check this [thread on discord](${thread.url}) for the whole conversation.\n\n---\n\n${msg.content}`;
-			const { data } = await gh.createIssue(name, body, [label]);
+			const { data } = await gh.createIssue(name, body, [...label.replaceAll(' ', '').split(',')]);
 
 			const status = labelsWithEmojis.find((label) => label.label === 'Backlog')?.emoji;
 
@@ -57,7 +61,7 @@ export class ThreadHandler {
 			});
 
 			issueObj.id = data.number;
-			issueObj.status = data.labels[0];
+			issueObj.status = data.labels;
 			issueObj.issueLink = data.html_url;
 
 			await UptimeService.addChannel(thread);
@@ -65,20 +69,20 @@ export class ThreadHandler {
 			throw new APIError(error.message);
 		}
 
+		logger.debug(issueObj.status.name);
 		issueEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.EMBED)
 			.setTitle(name)
 			.setURL(issueObj.issueLink)
-			.setDescription('Issue created.')
 			.addFields(
 				{
 					name: `ID`,
-					value: `${issueObj.id}`,
+					value: `\`${issueObj.id}\``,
 					inline: true,
 				},
 				{
 					name: `Status`,
-					value: `${issueObj.status.name}`,
+					value: `\`${issueObj.status.map((label: any) => label.name)}\``,
 					inline: true,
 				}
 			)
