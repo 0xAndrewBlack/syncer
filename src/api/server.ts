@@ -36,7 +36,7 @@ export class IssueServer extends Server {
 	private setup(): void {
 		this.app.disable('x-powered-by');
 
-		this.app.set('turst proxy', 1);
+		// this.app.set('turst proxy', 1);
 		this.app.set('json spaces', 2);
 
 		this.app.use(cors(corsOptions));

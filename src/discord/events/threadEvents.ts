@@ -69,7 +69,6 @@ export class ThreadHandler {
 			throw new APIError(error.message);
 		}
 
-		logger.debug(issueObj.status.name);
 		issueEmbed = new EmbedBuilder()
 			.setColor(config.DC_COLORS.EMBED)
 			.setTitle(name)
