@@ -24,7 +24,7 @@ export class ThreadHandler {
 		let issueObj: any = {};
 
 		const validChannels = [config.CHANNELS.BUG_CHANNEL, config.CHANNELS.IMP_CHANNEL, config.CHANNELS.INT_CHANNEL];
-		const isValidChannel = validChannels?.includes(thread.parentId as any);
+		const isValidChannel = validChannels?.includes(thread.parentId as string);
 
 		if (!isValidChannel) {
 			logger.warn('THREAD > Created in an other channel.');
@@ -46,7 +46,11 @@ export class ThreadHandler {
 			}
 
 			if (thread.parentId == config.CHANNELS.INT_CHANNEL) {
-				label = 'integration, infra';
+				label = 'integration';
+			}
+
+			if (thread.parentId == config.CHANNELS.INF_CHANNEL) {
+				label = 'infra';
 			}
 
 			const msg: any = (await starterMessage.first()) || (await thread.fetchStarterMessage());

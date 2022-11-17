@@ -128,7 +128,7 @@ export abstract class UptimeService {
 				return d;
 			})
 			.catch((error) => {
-				logger.error(`PINGER > [${error}] - Channel possibly deleted?`);
+				logger.error(`PINGER > [${error}] - Channel [${channel.id}] possibly deleted?`);
 
 				// this.removeChannel(channel);
 			});
