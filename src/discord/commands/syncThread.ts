@@ -46,7 +46,11 @@ export class SyncThread {
 				}
 
 				if (interaction.channel.parentId == config.CHANNELS.INT_CHANNEL) {
-					label = 'integration, infra';
+					label = 'integration';
+				}
+
+				if (interaction.channel.parentId == config.CHANNELS.INF_CHANNEL) {
+					label = 'infra';
 				}
 			}
 

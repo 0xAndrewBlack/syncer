@@ -30,6 +30,7 @@ export const config = {
 		BUG_CHANNEL: String(env.BUG_CHANNEL),
 		IMP_CHANNEL: String(env.IMP_CHANNEL),
 		INT_CHANNEL: String(env.INT_CHANNEL),
+		INF_CHANNEL: String(env.INF_CHANNEL),
 	},
 	DB_ID: String(env.DB_ID),
 	GUILD_ID: String(env.GUILD_ID),
