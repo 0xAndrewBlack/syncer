@@ -23,7 +23,13 @@ export class ThreadHandler {
 		let issueEmbed: any;
 		let issueObj: any = {};
 
-		const validChannels = [config.CHANNELS.BUG_CHANNEL, config.CHANNELS.IMP_CHANNEL, config.CHANNELS.INT_CHANNEL];
+		const validChannels = [
+			config.CHANNELS.BUG_CHANNEL,
+			config.CHANNELS.IMP_CHANNEL,
+			config.CHANNELS.INT_CHANNEL,
+			config.CHANNELS.INF_CHANNEL,
+		];
+
 		const isValidChannel = validChannels?.includes(thread.parentId as string);
 
 		if (!isValidChannel) {
