@@ -30,7 +30,7 @@
 		"cors": "^2.8.5",
 		"cron": "^2.1.0",
 		"discord-cross-ratelimit": "^0.0.7",
-		"discord-hybrid-sharding": "^1.7.4",
+		"discord-hybrid-sharding": "^1.7.5",
 		"discord.js": "^14.6.0",
 		"discordx": "^11.4.0",
 		"dotenv": "^16.0.3",
