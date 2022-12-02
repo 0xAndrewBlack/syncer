@@ -1,12 +1,5 @@
 export function stripStatusFromThread(threadName: string): string {
-	return threadName
-		.split(' ')
-		.reverse()
-		.join(' ')
-		.substring(0, threadName.length - 5)
-		.split(' ')
-		.reverse()
-		.join(' ');
+	return threadName.substring(4);
 }
 
 export const labels = [
