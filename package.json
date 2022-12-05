@@ -15,7 +15,7 @@
 		"@discordx/importer": "^1.1.10",
 		"@discordx/koa": "^1.1.2",
 		"@discordx/pagination": "^3.3.1",
-		"@discordx/utilities": "^5.1.0",
+		"@discordx/utilities": "^5.2.0",
 		"@koa/router": "^12.0.0",
 		"@octokit/auth-app": "^4.0.6",
 		"@octokit/rest": "^19.0.4",
