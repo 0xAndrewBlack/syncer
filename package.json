@@ -21,7 +21,7 @@
 		"@octokit/rest": "^19.0.4",
 		"@octokit/webhooks": "^10.2.0",
 		"@overnightjs/core": "^1.7.6",
-		"@prisma/client": "^4.4.0",
+		"@prisma/client": "^4.7.1",
 		"body-parser": "^1.20.1",
 		"bottleneck": "^2.19.5",
 		"compression": "^1.7.4",
