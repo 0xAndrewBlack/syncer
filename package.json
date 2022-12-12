@@ -55,7 +55,7 @@
 	"devDependencies": {
 		"@types/compression": "^1.7.2",
 		"@types/cookie-parser": "^1.4.3",
-		"@types/cors": "^2.8.12",
+		"@types/cors": "^2.8.13",
 		"@types/cron": "^2.0.0",
 		"@types/helmet": "^4.0.0",
 		"@types/koa": "^2.13.5",
