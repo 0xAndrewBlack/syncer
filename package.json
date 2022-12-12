@@ -39,7 +39,7 @@
 		"github-project": "^3.0.1",
 		"helmet": "^6.0.0",
 		"http-status-codes": "^2.2.0",
-		"koa": "^2.13.4",
+		"koa": "^2.14.1",
 		"koa-bodyparser": "^4.3.0",
 		"koa-json": "^2.0.2",
 		"koa-morgan": "^1.0.1",
