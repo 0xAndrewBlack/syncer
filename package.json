@@ -37,7 +37,7 @@
 		"express": "^4.18.2",
 		"gitcord": "^1.0.3",
 		"github-project": "^3.0.1",
-		"helmet": "^6.0.0",
+		"helmet": "^6.0.1",
 		"http-status-codes": "^2.2.0",
 		"koa": "^2.13.4",
 		"koa-bodyparser": "^4.3.0",
